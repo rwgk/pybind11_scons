@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 
-def build_list_of_test_py(substrings):
+def build_list_of_tests(substrings):
   """."""
   all_test_py = [
       "test_buffers.py",
@@ -53,37 +53,75 @@ def build_list_of_test_py(substrings):
     all_test_py.append("test_async.py")
   if not substrings:
     return all_test_py
+  substrings_used = set()
+  def substring_match(test_name):
+    for substr in substrings:
+      if substr in test_name:
+        substrings_used.add(substr)
+        return True
+    return False
+  test_embed = substring_match("test_embed")
   list_of_test_py = []
   for test_py in all_test_py:
-    for substr in substrings:
-      if substr in test_py:
-        list_of_test_py.append(test_py)
-  return list_of_test_py
+    if substring_match(test_py):
+      list_of_test_py.append(test_py)
+  substring_unused = substrings - substrings_used
+  if substring_unused:
+    raise RuntimeError(
+        "Unused command-line argument%s: %s" % (
+            plural_s(len(substring_unused)),
+            " ".join(sorted(substring_unused))))
+  return test_embed, list_of_test_py
+
+
+def plural_s(num, suffix="s"):
+  return "" if num == 1 else suffix
+
+
+def normabspath(path, *paths):
+  return os.path.normpath(os.path.abspath(os.path.join(path, *paths)))
+
+
+def is_pybind11_source_dirpath(dirpath):
+  if not os.path.isdir(dirpath):
+    return False
+  pybind11_h = normabspath(dirpath, "include/pybind11/pybind11.h")
+  return os.path.isfile(pybind11_h)
 
 
 def run(args):
   """."""
+  pybind11_dirpath = None
   n_opt = []
   substrings = set()
   for arg in args:
-   if arg.isdigit():
-     assert not n_opt
-     n_opt = ["-n", arg]
-   else:
-     substrings.add(arg)
-  pybind11_dirpath = os.path.normpath(os.path.abspath("../pybind11"))
+    if arg.isdigit():
+      assert not n_opt
+      n_opt = ["-n", arg]
+    elif is_pybind11_source_dirpath(arg):
+      assert pybind11_dirpath is None
+      pybind11_dirpath = normabspath(arg)
+    else:
+      substrings.add(arg)
+  assert pybind11_dirpath is not None
   tests_dirpath = os.path.join(pybind11_dirpath, "tests")
   test_embed_dirpath = os.path.join(tests_dirpath, "test_embed")
-  env = {"PYTHONPATH": os.path.abspath("lib")}
-  subprocess.call(
-      [os.path.abspath("bin/test_embed")],
-      cwd=test_embed_dirpath,
-      env=env)
-  list_of_test_py = build_list_of_test_py(substrings)
-  subprocess.call(
-      [sys.executable, "-m", "pytest"] + n_opt + list_of_test_py,
-      cwd=tests_dirpath,
-      env=env)
+  test_embed, list_of_test_py = build_list_of_tests(substrings)
+  env = {"PYTHONPATH": normabspath("lib")}
+  if test_embed:
+    print('Running tests in directory "%s":' % test_embed_dirpath)
+    sys.stdout.flush()
+    subprocess.call(
+        [normabspath("bin/test_embed")],
+        cwd=test_embed_dirpath,
+        env=env)
+  if list_of_test_py:
+    print('Running tests in directory "%s":' % tests_dirpath)
+    sys.stdout.flush()
+    subprocess.call(
+        [sys.executable, "-m", "pytest"] + n_opt + list_of_test_py,
+        cwd=tests_dirpath,
+        env=env)
 
 
 if __name__ == "__main__":

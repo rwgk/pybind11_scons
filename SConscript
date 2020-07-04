@@ -12,6 +12,12 @@ blob = subprocess.check_output([
 ], universal_newlines=True)
 python_paths = eval(blob)
 python_include = python_paths["include"]
+if (not os.path.isdir(python_include) and
+    python_include.startswith("/usr/local/include/")):
+  # sysconfig can be unreliable.
+  python_include = python_include.replace(
+      "/usr/local/include/",
+      "/usr/include/")
 python_lib = os.path.basename(python_include)
 
 cxx = "clang++"
