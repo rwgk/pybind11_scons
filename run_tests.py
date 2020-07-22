@@ -52,7 +52,7 @@ def build_list_of_tests(substrings):
       sys.version_info.minor >= 5):
     all_test_py.append("test_async.py")
   if not substrings:
-    return all_test_py
+    return True, all_test_py
   substrings_used = set()
   def substring_match(test_name):
     for substr in substrings:
