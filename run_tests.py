@@ -20,6 +20,7 @@ def build_list_of_tests(substrings):
       "test_class.py",
       "test_constants_and_functions.py",
       "test_copy_move.py",
+      "test_custom_type_casters.py",
       "test_docstring_options.py",
       "test_eigen.py",
       "test_enum.py",
