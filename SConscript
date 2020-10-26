@@ -42,9 +42,14 @@ env_base.Replace(
     SHLIBSUFFIX=".so")
 
 def build_paths_in_subdir(subdir, filenames):
-  return [
-      os.path.normpath(os.path.join(subdir, filename))
-      for filename in filenames]
+  paths = []
+  for filename in filenames:
+    sf = os.path.normpath(os.path.join(subdir, filename))
+    if "*" in filename or "?" in filename:
+      paths.extend(Glob(sf))
+    else:
+      paths.append(sf)
+  return paths
 
 def pybind11_tests_shared_library(target, addl_cppdefines, sources):
   env_base.Clone(
@@ -64,45 +69,7 @@ def pybind11_tests_shared_library(target, addl_cppdefines, sources):
 pybind11_tests_shared_library(
     target="#lib/pybind11_tests",
     addl_cppdefines=["pybind11_tests_EXPORTS"],
-    sources=[
-        "pybind11_tests.cpp",
-        "test_async.cpp",
-        "test_buffers.cpp",
-        "test_builtin_casters.cpp",
-        "test_call_policies.cpp",
-        "test_callbacks.cpp",
-        "test_chrono.cpp",
-        "test_class.cpp",
-        "test_constants_and_functions.cpp",
-        "test_copy_move.cpp",
-        "test_custom_type_casters.cpp",
-        "test_docstring_options.cpp",
-        "test_eigen.cpp",
-        "test_enum.cpp",
-        "test_eval.cpp",
-        "test_exceptions.cpp",
-        "test_factory_constructors.cpp",
-        "test_gil_scoped.cpp",
-        "test_iostream.cpp",
-        "test_kwargs_and_defaults.cpp",
-        "test_local_bindings.cpp",
-        "test_methods_and_attributes.cpp",
-        "test_modules.cpp",
-        "test_multiple_inheritance.cpp",
-        "test_numpy_array.cpp",
-        "test_numpy_dtypes.cpp",
-        "test_numpy_vectorize.cpp",
-        "test_opaque_types.cpp",
-        "test_operator_overloading.cpp",
-        "test_pickling.cpp",
-        "test_pytypes.cpp",
-        "test_sequences_and_iterators.cpp",
-        "test_smart_ptr.cpp",
-        "test_stl.cpp",
-        "test_stl_binders.cpp",
-        "test_tagbased_polymorphic.cpp",
-        "test_union.cpp",
-        "test_virtual_functions.cpp"])
+    sources=["pybind11_tests.cpp", "test_*.cpp"])
 
 pybind11_tests_shared_library(
     target="#lib/cross_module_gil_utils",

@@ -9,49 +9,23 @@ import subprocess
 import sys
 
 
-def build_list_of_tests(substrings):
+def build_list_of_tests(tests_dirpath, substrings):
   """."""
-  all_test_py = [
-      "test_buffers.py",
-      "test_builtin_casters.py",
-      "test_call_policies.py",
-      "test_callbacks.py",
-      "test_chrono.py",
-      "test_class.py",
-      "test_constants_and_functions.py",
-      "test_copy_move.py",
-      "test_custom_type_casters.py",
-      "test_docstring_options.py",
-      "test_eigen.py",
-      "test_enum.py",
-      "test_eval.py",
-      "test_exceptions.py",
-      "test_factory_constructors.py",
-      "test_gil_scoped.py",
-      "test_iostream.py",
-      "test_kwargs_and_defaults.py",
-      "test_local_bindings.py",
-      "test_methods_and_attributes.py",
-      "test_modules.py",
-      "test_multiple_inheritance.py",
-      "test_numpy_array.py",
-      "test_numpy_dtypes.py",
-      "test_numpy_vectorize.py",
-      "test_opaque_types.py",
-      "test_operator_overloading.py",
-      "test_pickling.py",
-      "test_pytypes.py",
-      "test_sequences_and_iterators.py",
-      "test_smart_ptr.py",
-      "test_stl.py",
-      "test_stl_binders.py",
-      "test_tagbased_polymorphic.py",
-      "test_union.py",
-      "test_virtual_functions.py",
-  ]
+  all_test_py = []
+  for node in os.listdir(tests_dirpath):
+    if not node.startswith("test_") or not node.endswith(".cpp"):
+      continue
+    cpp_filepath = os.path.join(tests_dirpath, node)
+    py_filepath = cpp_filepath[:-3] + "py"
+    assert os.path.isfile(cpp_filepath), cpp_filepath
+    assert os.path.isfile(py_filepath), py_filepath
+    all_test_py.append(node[:-3] + "py")
+  all_test_py.sort()
   if (sys.version_info.major >= 3 and
       sys.version_info.minor >= 5):
-    all_test_py.append("test_async.py")
+    assert "test_async.py" in all_test_py
+  else:
+    all_test_py.remove("test_async.py")
   if not substrings:
     return True, all_test_py
   substrings_used = set()
@@ -107,7 +81,7 @@ def run(args):
   assert pybind11_dirpath is not None
   tests_dirpath = os.path.join(pybind11_dirpath, "tests")
   test_embed_dirpath = os.path.join(tests_dirpath, "test_embed")
-  test_embed, list_of_test_py = build_list_of_tests(substrings)
+  test_embed, list_of_test_py = build_list_of_tests(tests_dirpath, substrings)
   env = {"PYTHONPATH": normabspath("lib")}
   if test_embed:
     print('Running tests in directory "%s":' % test_embed_dirpath)
