@@ -51,12 +51,11 @@ def build_paths_in_subdir(subdir, filenames):
       paths.append(sf)
   return paths
 
-def pybind11_tests_shared_library(target, addl_cppdefines, sources):
+def pybind11_tests_shared_library(target, sources):
   env_base.Clone(
       CPPDEFINES = [
           "NDEBUG",
-          "PYBIND11_TEST_BOOST",
-          "PYBIND11_TEST_EIGEN"] + addl_cppdefines,
+          "PYBIND11_TEST_BOOST"],
       CPPPATH=["#pybind11/include",
                python_include,
                "/usr/include/eigen3"],
@@ -68,21 +67,18 @@ def pybind11_tests_shared_library(target, addl_cppdefines, sources):
 
 pybind11_tests_shared_library(
     target="#lib/pybind11_tests",
-    addl_cppdefines=["pybind11_tests_EXPORTS"],
     sources=["pybind11_tests.cpp", "test_*.cpp"])
 
 pybind11_tests_shared_library(
     target="#lib/cross_module_gil_utils",
-    addl_cppdefines=["cross_module_gil_utils_EXPORTS"],
     sources=["cross_module_gil_utils.cpp"])
 
 pybind11_tests_shared_library(
     target="#lib/pybind11_cross_module_tests",
-    addl_cppdefines=["pybind11_cross_module_tests_EXPORTS"],
     sources=["pybind11_cross_module_tests.cpp"])
 
 env_base.Clone(
-    CPPDEFINES = ["NDEBUG", "external_module_EXPORTS"],
+    CPPDEFINES = ["NDEBUG"],
     CPPPATH=["#pybind11/include",
              python_include],
     CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
