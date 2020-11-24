@@ -68,11 +68,20 @@ def run(args):
   """."""
   pybind11_dirpath = None
   n_opt = []
+  k_opt = []
+  v_opt = []
   substrings = set()
-  for arg in args:
+  args_iter = iter(args)
+  for arg in args_iter:
     if arg.isdigit():
       assert not n_opt
       n_opt = ["-n", arg]
+    elif arg.startswith("-k"):
+      assert not k_opt
+      k_opt = [arg, next(args_iter)]
+    elif arg.startswith("-v"):
+      assert not v_opt
+      v_opt = [arg]
     elif is_pybind11_source_dirpath(arg):
       assert pybind11_dirpath is None
       pybind11_dirpath = normabspath(arg)
@@ -94,7 +103,8 @@ def run(args):
     print('Running tests in directory "%s":' % tests_dirpath)
     sys.stdout.flush()
     subprocess.call(
-        [sys.executable, "-m", "pytest"] + n_opt + list_of_test_py,
+        [sys.executable, "-m", "pytest"]
+        + n_opt + v_opt + k_opt + list_of_test_py,
         cwd=tests_dirpath,
         env=env)
 
