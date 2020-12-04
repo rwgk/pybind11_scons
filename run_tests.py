@@ -30,11 +30,26 @@ def build_list_of_tests(tests_dirpath, substrings):
     return True, all_test_py
   substrings_used = set()
   def substring_match(test_name):
+    in_out_seen = set()
+    in_out_matching = set()
     for substr in substrings:
-      if substr in test_name:
+      if substr.startswith("-"):
+        plain_substr = substr[1:]
+        in_out = -1
+      else:
+        plain_substr = substr
+        in_out = 1
+      in_out_seen.add(in_out)
+      if plain_substr in test_name:
         substrings_used.add(substr)
-        return True
-    return False
+        in_out_matching.add(in_out)
+    if -1 in in_out_matching:
+      return False
+    if 1 in in_out_matching:
+      return True
+    if 1 in in_out_seen:
+      return False
+    return -1 in in_out_seen
   test_embed = substring_match("test_embed")
   list_of_test_py = []
   for test_py in all_test_py:
