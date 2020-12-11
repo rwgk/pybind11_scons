@@ -23,13 +23,15 @@ python_lib = os.path.basename(python_include)
 cxx = "clang++"
 std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
-opt_opt = ["-O0", "-g"]
+opt_opt = ["-O0", "-g", "-flto", "-fno-fat-lto-objects"][:2]
 wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor"]
 if "python2" in python_lib:
   if pybind11_build_config["cxx_std"] >= "c++17":
     wrn_opt.append("-Wno-register")
   else:
     wrn_opt.append("-Wno-deprecated-register")
+
+ndebug = ["NDEBUG"][:0]
 
 env_base = Environment(
     ENV=os.environ,
@@ -53,8 +55,7 @@ def build_paths_in_subdir(subdir, filenames):
 
 def pybind11_tests_shared_library(target, sources):
   env_base.Clone(
-      CPPDEFINES = [
-          "NDEBUG",
+      CPPDEFINES = ndebug + [
           "PYBIND11_TEST_BOOST"],
       CPPPATH=["#pybind11/include",
                python_include,
@@ -78,7 +79,7 @@ pybind11_tests_shared_library(
     sources=["pybind11_cross_module_tests.cpp"])
 
 env_base.Clone(
-    CPPDEFINES = ["NDEBUG"],
+    CPPDEFINES = ndebug,
     CPPPATH=["#pybind11/include",
              python_include],
     CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
@@ -88,7 +89,7 @@ env_base.Clone(
         source=["#pybind11/tests/test_embed/external_module.cpp"])
 
 env_base.Clone(
-    CPPDEFINES = ["NDEBUG"],
+    CPPDEFINES = ndebug,
     CPPPATH=["#pybind11/include",
              python_include,
              "#Catch2/single_include/catch2"],

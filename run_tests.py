@@ -83,6 +83,7 @@ def run(args):
   """."""
   pybind11_dirpath = None
   n_opt = []
+  f_opt = []
   k_opt = []
   v_opt = []
   substrings = set()
@@ -91,6 +92,9 @@ def run(args):
     if arg.isdigit():
       assert not n_opt
       n_opt = ["-n", arg]
+    elif arg.startswith("-f"):
+      assert not f_opt
+      f_opt = ["-p", "no:faulthandler"]
     elif arg.startswith("-k"):
       assert not k_opt
       k_opt = [arg, next(args_iter)]
@@ -119,7 +123,7 @@ def run(args):
     sys.stdout.flush()
     subprocess.call(
         [sys.executable, "-m", "pytest"]
-        + n_opt + v_opt + k_opt + list_of_test_py,
+        + n_opt + f_opt + k_opt + v_opt + list_of_test_py,
         cwd=tests_dirpath,
         env=env)
 
