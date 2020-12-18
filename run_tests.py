@@ -84,6 +84,8 @@ def run(args):
   pybind11_dirpath = None
   n_opt = []
   f_opt = []
+  pytest_no_faulthandler = ["-p", "no:faulthandler"]
+  g_opt = False
   k_opt = []
   v_opt = []
   substrings = set()
@@ -94,7 +96,10 @@ def run(args):
       n_opt = ["-n", arg]
     elif arg.startswith("-f"):
       assert not f_opt
-      f_opt = ["-p", "no:faulthandler"]
+      f_opt = pytest_no_faulthandler
+    elif arg.startswith("-g"):
+      assert not g_opt
+      g_opt = True
     elif arg.startswith("-k"):
       assert not k_opt
       k_opt = [arg, next(args_iter)]
@@ -119,13 +124,28 @@ def run(args):
         cwd=test_embed_dirpath,
         env=env)
   if list_of_test_py:
+    if g_opt and not f_opt:
+      f_opt = pytest_no_faulthandler
+    common_args = (
+        ["-m", "pytest"]
+        + n_opt + f_opt + k_opt + v_opt
+        + list_of_test_py)
     print('Running tests in directory "%s":' % tests_dirpath)
     sys.stdout.flush()
-    subprocess.call(
-        [sys.executable, "-m", "pytest"]
-        + n_opt + f_opt + k_opt + v_opt + list_of_test_py,
-        cwd=tests_dirpath,
-        env=env)
+    if not g_opt:
+      subprocess.call(
+          [sys.executable] + common_args,
+          cwd=tests_dirpath,
+          env=env)
+    else:
+      bash_env = " ".join(["%s='%s'" % kv for kv in sorted(env.items())])
+      gdb_ex = " ".join(["run"] + common_args)
+      bash_gdb_command = "%s gdb --cd '%s' '%s' -ex '%s'" % (
+          bash_env, tests_dirpath, sys.executable, gdb_ex)
+      print(bash_gdb_command)
+      print()
+      sys.stdout.flush()
+      subprocess.call(bash_gdb_command, shell=True)
 
 
 if __name__ == "__main__":
