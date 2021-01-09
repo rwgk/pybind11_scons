@@ -66,9 +66,10 @@ def pybind11_tests_shared_library(target, sources):
           target=target,
           source=build_paths_in_subdir("#pybind11/tests", sources))
 
+test_cpp = ARGUMENTS.get("selected_test_cpp", "test_*.cpp")
 pybind11_tests_shared_library(
     target="#lib/pybind11_tests",
-    sources=["pybind11_tests.cpp", "test_*.cpp"])
+    sources=["pybind11_tests.cpp", test_cpp])
 
 pybind11_tests_shared_library(
     target="#lib/cross_module_gil_utils",
