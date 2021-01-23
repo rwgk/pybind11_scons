@@ -23,7 +23,7 @@ def build_list_of_tests(tests_dirpath, substrings):
     assert os.path.isfile(cpp_filepath), cpp_filepath
     assert os.path.isfile(py_filepath), py_filepath
     all_test_py.append(node[:-3] + "py")
-  all_test_py.sort()
+  all_test_py = list(sorted(set(all_test_py)))
   if (sys.version_info.major >= 3 and
       sys.version_info.minor >= 5):
     assert "test_async.py" in all_test_py
