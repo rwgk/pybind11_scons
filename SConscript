@@ -71,13 +71,17 @@ pybind11_tests_shared_library(
     target="#lib/pybind11_tests",
     sources=["pybind11_tests.cpp", test_cpp])
 
-pybind11_tests_shared_library(
-    target="#lib/cross_module_gil_utils",
-    sources=["cross_module_gil_utils.cpp"])
-
-pybind11_tests_shared_library(
-    target="#lib/pybind11_cross_module_tests",
-    sources=["pybind11_cross_module_tests.cpp"])
+for main_module in [
+    "cross_module_gil_utils",
+    "pybind11_cross_module_tests",
+    "classh_module_local_0",
+    "classh_module_local_1",
+    "classh_module_local_2",
+]:
+  if Glob("#pybind11/tests/%s.cpp" % main_module):
+    pybind11_tests_shared_library(
+        target="#lib/%s" % main_module,
+        sources=["%s.cpp" % main_module])
 
 env_base.Clone(
     CPPDEFINES = ndebug,
