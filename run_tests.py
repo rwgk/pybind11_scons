@@ -13,7 +13,7 @@ def build_list_of_tests(tests_dirpath, substrings):
   """."""
   all_test_py = []
   for node in os.listdir(tests_dirpath):
-    if node.startswith("test_classh_") and node.endswith(".py"):
+    if node.startswith("test_class_sh_") and node.endswith(".py"):
       all_test_py.append(node)
       continue
     if not node.startswith("test_") or not node.endswith(".cpp"):

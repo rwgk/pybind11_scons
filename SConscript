@@ -74,9 +74,9 @@ pybind11_tests_shared_library(
 for main_module in [
     "cross_module_gil_utils",
     "pybind11_cross_module_tests",
-    "classh_module_local_0",
-    "classh_module_local_1",
-    "classh_module_local_2",
+    "class_sh_module_local_0",
+    "class_sh_module_local_1",
+    "class_sh_module_local_2",
 ]:
   if Glob("#pybind11/tests/%s.cpp" % main_module):
     pybind11_tests_shared_library(
