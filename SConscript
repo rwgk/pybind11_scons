@@ -32,6 +32,8 @@ if "python2" in python_lib:
     wrn_opt.append("-Wno-deprecated-register")
 
 ndebug = ["NDEBUG"][:0]
+extra_defines = ARGUMENTS.get("extra_defines", "").split(",")
+common_defines = ndebug + extra_defines
 
 env_base = Environment(
     ENV=os.environ,
@@ -55,7 +57,7 @@ def build_paths_in_subdir(subdir, filenames):
 
 def pybind11_tests_shared_library(target, sources):
   env_base.Clone(
-      CPPDEFINES = ndebug + [
+      CPPDEFINES = common_defines + [
           "PYBIND11_TEST_BOOST"],
       CPPPATH=["#pybind11/include",
                python_include,
@@ -84,7 +86,7 @@ for main_module in [
         sources=["%s.cpp" % main_module])
 
 env_base.Clone(
-    CPPDEFINES = ndebug,
+    CPPDEFINES = common_defines,
     CPPPATH=["#pybind11/include",
              python_include],
     CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
@@ -94,7 +96,7 @@ env_base.Clone(
         source=["#pybind11/tests/test_embed/external_module.cpp"])
 
 env_base.Clone(
-    CPPDEFINES = ndebug,
+    CPPDEFINES = common_defines,
     CPPPATH=["#pybind11/include",
              python_include,
              "#Catch2/single_include/catch2"],
