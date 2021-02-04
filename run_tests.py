@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import collections
 import os
 import subprocess
 import sys
@@ -91,6 +92,7 @@ def run(args):
   g_opt = False
   k_opt = []
   v_opt = []
+  i_opt = False
   substrings = set()
   args_iter = iter(args)
   for arg in args_iter:
@@ -112,6 +114,9 @@ def run(args):
     elif is_pybind11_source_dirpath(arg):
       assert pybind11_dirpath is None
       pybind11_dirpath = normabspath(arg)
+    elif arg.startswith("-i"):
+      assert not i_opt
+      i_opt = True
     else:
       substrings.add(arg)
   assert pybind11_dirpath is not None
@@ -126,7 +131,27 @@ def run(args):
         [normabspath("bin/test_embed")],
         cwd=test_embed_dirpath,
         env=env)
-  if list_of_test_py:
+  if i_opt:
+    print('Running %d individual test(s) in directory "%s":'
+          % (len(list_of_test_py), tests_dirpath))
+    sys.stdout.flush()
+    return_code_counts = collections.defaultdict(int)
+    common_args = ["-m", "pytest"] + v_opt
+    for test_py in list_of_test_py:
+      print('Running individual test "%s":' % test_py)
+      sys.stdout.flush()
+      return_code = subprocess.call(
+          [sys.executable] + common_args + [test_py],
+          cwd=tests_dirpath,
+          env=env)
+      print('Return code for individual test "%s": %d' % (test_py, return_code))
+      sys.stdout.flush()
+      return_code_counts[return_code] += 1
+    print("Frequency of return codes (total is %d):" % len(return_code_counts))
+    for return_code, count in sorted(return_code_counts.items()):
+      print("  %3d: %d" % (return_code, count))
+    sys.stdout.flush()
+  elif list_of_test_py:
     if g_opt and not f_opt:
       f_opt = pytest_no_faulthandler
     common_args = (
