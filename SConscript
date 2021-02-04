@@ -20,10 +20,16 @@ if (not os.path.isdir(python_include) and
       "/usr/include/")
 python_lib = os.path.basename(python_include)
 
+def arguments_get_split(key, sep=","):
+  s = ARGUMENTS.get(key)
+  if s is None:
+    return []
+  return  s.split(sep)
+
 cxx = "clang++"
 std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
-opt_opt = ["-O0", "-g", "-flto", "-fno-fat-lto-objects"][:2]
+opt_opt = ["-O0", "-g"]
 wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor"]
 if "python2" in python_lib:
   if pybind11_build_config["cxx_std"] >= "c++17":
@@ -31,9 +37,27 @@ if "python2" in python_lib:
   else:
     wrn_opt.append("-Wno-deprecated-register")
 
-ndebug = ["NDEBUG"][:0]
-extra_defines = ARGUMENTS.get("extra_defines", "").split(",")
-common_defines = ndebug + extra_defines
+extra_defines = arguments_get_split("extra_defines")
+
+def process_meta_opts():
+  meta_opts = arguments_get_split("meta_opts")
+
+  def have_meta_opt(*names):
+    result = False
+    for name in names:
+      if name in meta_opts:
+        meta_opts.remove(name)
+        result = True
+    return result
+
+  if have_meta_opt("lto"):
+    opt_opt.extend(["-flto", "-fno-fat-lto-objects"])
+  if have_meta_opt("limitless_diagnostics", "bio"):  # bring it on
+    wrn_opt.extend(["-ferror-limit=0", "-ftemplate-backtrace-limit=0"])
+
+  assert not meta_opts, meta_opts
+
+process_meta_opts()
 
 env_base = Environment(
     ENV=os.environ,
@@ -57,7 +81,7 @@ def build_paths_in_subdir(subdir, filenames):
 
 def pybind11_tests_shared_library(target, sources):
   env_base.Clone(
-      CPPDEFINES = common_defines + [
+      CPPDEFINES = extra_defines + [
           "PYBIND11_TEST_BOOST"],
       CPPPATH=["#pybind11/include",
                python_include,
@@ -86,7 +110,7 @@ for main_module in [
         sources=["%s.cpp" % main_module])
 
 env_base.Clone(
-    CPPDEFINES = common_defines,
+    CPPDEFINES = extra_defines,
     CPPPATH=["#pybind11/include",
              python_include],
     CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
@@ -96,7 +120,7 @@ env_base.Clone(
         source=["#pybind11/tests/test_embed/external_module.cpp"])
 
 env_base.Clone(
-    CPPDEFINES = common_defines,
+    CPPDEFINES = extra_defines,
     CPPPATH=["#pybind11/include",
              python_include,
              "#Catch2/single_include/catch2"],
