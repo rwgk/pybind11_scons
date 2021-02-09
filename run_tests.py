@@ -92,6 +92,7 @@ def run(args):
   g_opt = False
   k_opt = []
   v_opt = []
+  count_opt = []
   i_opt = False
   substrings = set()
   args_iter = iter(args)
@@ -111,6 +112,12 @@ def run(args):
     elif arg.startswith("-v"):
       assert not v_opt
       v_opt = [arg]
+    elif arg.startswith("--count"):
+      assert not count_opt
+      i = arg.find("=")
+      assert i >= 0
+      assert arg[i + 1:].isdigit()
+      count_opt = [arg]
     elif is_pybind11_source_dirpath(arg):
       assert pybind11_dirpath is None
       pybind11_dirpath = normabspath(arg)
@@ -156,7 +163,7 @@ def run(args):
       f_opt = pytest_no_faulthandler
     common_args = (
         ["-m", "pytest"]
-        + n_opt + f_opt + k_opt + v_opt
+        + n_opt + f_opt + k_opt + v_opt + count_opt
         + list_of_test_py)
     print('Running tests in directory "%s":' % tests_dirpath)
     sys.stdout.flush()
