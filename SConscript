@@ -38,6 +38,7 @@ if "python2" in python_lib:
     wrn_opt.append("-Wno-deprecated-register")
 
 extra_defines = arguments_get_split("extra_defines")
+extra_defines.append("PYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX")
 
 def process_meta_opts():
   meta_opts = arguments_get_split("meta_opts")
