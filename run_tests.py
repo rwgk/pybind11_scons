@@ -91,6 +91,7 @@ def run(args):
   pytest_no_faulthandler = ["-p", "no:faulthandler"]
   g_opt = False
   k_opt = []
+  s_opt = []
   v_opt = []
   count_opt = []
   i_opt = False
@@ -109,6 +110,9 @@ def run(args):
     elif arg.startswith("-k"):
       assert not k_opt
       k_opt = [arg, next(args_iter)]
+    elif arg.startswith("-s"):
+      assert not s_opt
+      s_opt = [arg]
     elif arg.startswith("-v"):
       assert not v_opt
       v_opt = [arg]
@@ -143,7 +147,7 @@ def run(args):
           % (len(list_of_test_py), tests_dirpath))
     sys.stdout.flush()
     return_code_counts = collections.defaultdict(int)
-    common_args = ["-m", "pytest"] + v_opt
+    common_args = ["-m", "pytest"] + s_opt + v_opt
     for test_py in list_of_test_py:
       print('Running individual test "%s":' % test_py)
       sys.stdout.flush()
@@ -163,7 +167,7 @@ def run(args):
       f_opt = pytest_no_faulthandler
     common_args = (
         ["-m", "pytest"]
-        + n_opt + f_opt + k_opt + v_opt + count_opt
+        + n_opt + f_opt + k_opt + s_opt + v_opt + count_opt
         + list_of_test_py)
     print('Running tests in directory "%s":' % tests_dirpath)
     sys.stdout.flush()
