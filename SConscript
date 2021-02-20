@@ -26,7 +26,11 @@ def arguments_get_split(key, sep=","):
     return []
   return  s.split(sep)
 
-cxx = "clang++"
+build_config_compiler = pybind11_build_config["compiler"]
+if build_config_compiler == "linux_clang":
+  cxx = "clang++"
+elif build_config_compiler == "linux_gcc":
+  cxx = "g++"
 std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
 opt_opt = ["-O0", "-g"]
@@ -52,7 +56,11 @@ def process_meta_opts():
     return result
 
   if have_meta_opt("lto"):
-    opt_opt.extend(["-flto", "-fno-fat-lto-objects"])
+    global opt_opt
+    opt_opt = ["-Os"]
+    opt_opt.append("-flto")
+    if build_config_compiler == "linux_gcc":
+      opt_opt.append("-fno-fat-lto-objects")
   if have_meta_opt("limitless_diagnostics", "bio"):  # bring it on
     wrn_opt.extend(["-ferror-limit=0", "-ftemplate-backtrace-limit=0"])
 
@@ -133,3 +141,13 @@ env_base.Clone(
             "#pybind11/tests/test_embed",
             ["test_interpreter.cpp",
              "catch.cpp"]))
+
+env_base.Clone(
+    CPPDEFINES = extra_defines,
+    CPPPATH=["#pybind11/include",
+             python_include],
+    CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
+    LINKFLAGS=["-shared", "-fPIC"] + opt_opt,
+    LIBPREFIX="").SharedLibrary(
+        target="#lib/pybind11_ubench_holder_comparison",
+        source=["#pybind11/ubench/holder_comparison.cpp"])
