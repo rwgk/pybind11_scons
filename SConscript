@@ -142,12 +142,13 @@ env_base.Clone(
             ["test_interpreter.cpp",
              "catch.cpp"]))
 
-env_base.Clone(
-    CPPDEFINES = extra_defines,
-    CPPPATH=["#pybind11/include",
-             python_include],
-    CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
-    LINKFLAGS=["-shared", "-fPIC"] + opt_opt,
-    LIBPREFIX="").SharedLibrary(
-        target="#lib/pybind11_ubench_holder_comparison",
-        source=["#pybind11/ubench/holder_comparison.cpp"])
+if Glob("#pybind11/ubench/holder_comparison.cpp"):
+  env_base.Clone(
+      CPPDEFINES = extra_defines,
+      CPPPATH=["#pybind11/include",
+               python_include],
+      CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
+      LINKFLAGS=["-shared", "-fPIC"] + opt_opt,
+      LIBPREFIX="").SharedLibrary(
+          target="#lib/pybind11_ubench_holder_comparison",
+          source=["#pybind11/ubench/holder_comparison.cpp"])
