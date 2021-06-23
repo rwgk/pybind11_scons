@@ -34,7 +34,7 @@ elif build_config_compiler == "linux_gcc":
 std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
 opt_opt = ["-O0", "-g"]
-wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor"]
+wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor", "-Wunused-result"]
 if "python2" in python_lib:
   if pybind11_build_config["cxx_std"] >= "c++17":
     wrn_opt.append("-Wno-register")
