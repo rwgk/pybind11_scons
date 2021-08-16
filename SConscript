@@ -35,13 +35,6 @@ std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
 opt_opt = ["-O0", "-g"]
 wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor", "-Wunused-result"]
-if build_config_compiler == "linux_gcc":
-  wrn_opt += ["-Wno-deprecated-copy"]  # TODO: work on pragma in eigen.h
-if "python2" in python_lib:
-  if pybind11_build_config["cxx_std"] >= "c++17":
-    wrn_opt.append("-Wno-register")
-  else:
-    wrn_opt.append("-Wno-deprecated-register")
 
 extra_defines = arguments_get_split("extra_defines")
 extra_defines.append("PYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX")
@@ -90,14 +83,22 @@ def build_paths_in_subdir(subdir, filenames):
       paths.append(sf)
   return paths
 
+def use_isystem(include_dirs):
+  """This is to suppress warnings for external (non-pybind11) code."""
+  # https://stackoverflow.com/questions/2579576/i-dir-vs-isystem-dir
+  # https://devblogs.microsoft.com/cppblog/broken-warnings-theory/
+  opts = []
+  for d in include_dirs:
+    opts.extend(["-isystem", d])
+  return opts
+
 def pybind11_tests_shared_library(target, sources):
   env_base.Clone(
       CPPDEFINES = extra_defines + [
           "PYBIND11_TEST_BOOST"],
-      CPPPATH=["#pybind11/include",
-               python_include,
-               "/usr/include/eigen3"],
-      CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
+      CPPPATH=["#pybind11/include"],
+      CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt +
+               use_isystem([python_include, "/usr/include/eigen3"]),
       LINKFLAGS=["-shared", "-fPIC"] + opt_opt,
       LIBPREFIX="").SharedLibrary(
           target=target,
