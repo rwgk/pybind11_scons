@@ -138,7 +138,7 @@ env_base.Clone(
              "#Catch2/single_include/catch2"],
     CXXFLAGS=std_opt + opt_opt + wrn_opt,
     LINKFLAGS=["-rdynamic"] + opt_opt,
-    LIBS=["pthread", python_lib]).Program(
+    LIBS=[python_lib, "pthread", "dl", "util"]).Program(
         target="#bin/test_embed",
         source=build_paths_in_subdir(
             "#pybind11/tests/test_embed",
