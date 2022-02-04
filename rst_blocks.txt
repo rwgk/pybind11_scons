@@ -1,0 +1,552 @@
+FILE: include/pybind11/pytypes.h
+/** \rst
+    A mixin class which adds common functions to `handle`, `object` and various accessors.
+    The only requirement for `Derived` is to implement ``PyObject *Derived::ptr() const``.
+\endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Return an iterator equivalent to calling ``iter()`` in Python. The object
+        must be a collection which supports the iteration protocol.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Return an internal functor to invoke the object's sequence protocol. Casting
+        the returned ``detail::item_accessor`` instance to a `handle` or `object`
+        subclass causes a corresponding call to ``__getitem__``. Assigning a `handle`
+        or `object` subclass causes a call to ``__setitem__``.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Return an internal functor to access the object's attributes. Casting the
+        returned ``detail::obj_attr_accessor`` instance to a `handle` or `object`
+        subclass causes a corresponding call to ``getattr``. Assigning a `handle`
+        or `object` subclass causes a call to ``setattr``.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Matches * unpacking in Python, e.g. to unpack arguments out of a ``tuple``
+        or ``list`` for a function call. Applying another * to the result yields
+        ** unpacking, e.g. to unpack a dict as function keyword arguments.
+        See :ref:`calling_python_functions`.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Assuming the Python object is a function or implements the ``__call__``
+        protocol, ``operator()`` invokes the underlying function, passing an
+        arbitrary set of parameters. The result is returned as a `object` and
+        may need to be converted back into a Python object using `handle::cast()`.
+
+        When some of the arguments cannot be converted to Python objects, the
+        function will throw a `cast_error` exception. When the Python function
+        call fails, a `error_already_set` exception is thrown.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+/** \rst
+    Holds a reference to a Python object (no reference counting)
+
+    The `handle` class is a thin wrapper around an arbitrary Python object (i.e. a
+    ``PyObject *`` in Python's C API). It does not perform any automatic reference
+    counting and merely provides a basic C++ interface to various Python API functions.
+
+    .. seealso::
+        The `object` class inherits from `handle` and adds automatic reference
+        counting features.
+\endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Manually increase the reference count of the Python object. Usually, it is
+        preferable to use the `object` class which derives from `handle` and calls
+        this function automatically. Returns a reference to itself.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Manually decrease the reference count of the Python object. Usually, it is
+        preferable to use the `object` class which derives from `handle` and calls
+        this function automatically. Returns a reference to itself.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Attempt to cast the Python object into the given C++ type. A `cast_error`
+        will be throw upon failure.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Deprecated: Check that the underlying pointers are the same.
+        Equivalent to ``obj1 is obj2`` in Python.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+/** \rst
+    Holds a reference to a Python object (with reference counting)
+
+    Like `handle`, the `object` class is a thin wrapper around an arbitrary Python
+    object (i.e. a ``PyObject *`` in Python's C API). In contrast to `handle`, it
+    optionally increases the object's reference count upon construction, and it
+    *always* decreases the reference count when the `object` instance goes out of
+    scope and is destructed. When using `object` instances consistently, it is much
+    easier to get reference counting right at the first attempt.
+\endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Resets the internal pointer to ``nullptr`` without decreasing the
+        object's reference count. The function returns a raw handle to the original
+        Python object.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+/** \rst
+    Declare that a `handle` or ``PyObject *`` is a certain type and borrow the reference.
+    The target type ``T`` must be `object` or one of its derived classes. The function
+    doesn't do any conversions or checks. It's up to the user to make sure that the
+    target type is correct.
+
+    .. code-block:: cpp
+
+        PyObject *p = PyList_GetItem(obj, index);
+        py::object o = reinterpret_borrow<py::object>(p);
+        // or
+        py::tuple t = reinterpret_borrow<py::tuple>(p); // <-- `p` must be already be a `tuple`
+\endrst */
+
+FILE: include/pybind11/pytypes.h
+/** \rst
+    Like `reinterpret_borrow`, but steals the reference.
+
+     .. code-block:: cpp
+
+        PyObject *p = PyObject_Str(obj);
+        py::str s = reinterpret_steal<py::str>(p); // <-- `p` must be already be a `str`
+\endrst */
+
+FILE: include/pybind11/pytypes.h
+    \rst
+    Return true if ``obj`` is an instance of ``T``. Type ``T`` must be a subclass of
+    `object` or a class which was exposed to Python as ``py::class_<T>``.
+\endrst */
+
+FILE: include/pybind11/pytypes.h
+/** \rst
+    Wraps a Python iterator so that it can also be used as a C++ input iterator
+
+    Caveat: copying an iterator does not (and cannot) clone the internal
+    state of the Python iterable. This also applies to the post-increment
+    operator. This iterator should only be used to retrieve the current
+    value using ``operator*()``.
+\endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+         The value which marks the end of the iteration. ``it == iterator::sentinel()``
+         is equivalent to catching ``StopIteration`` in Python.
+
+         .. code-block:: cpp
+
+             void foo(py::iterator it) {
+                 while (it != py::iterator::sentinel()) {
+                    // use `*it`
+                    ++it;
+                 }
+             }
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Return a string representation of the object. This is analogous to
+        the ``str()`` function in Python.
+    \endrst */
+
+FILE: include/pybind11/pytypes.h
+/** \rst
+    String literal version of `str`
+ \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Creates ``memoryview`` from ``buffer_info``.
+
+        ``buffer_info`` must be created from ``buffer::request()``. Otherwise
+        throws an exception.
+
+        For creating a ``memoryview`` from objects that support buffer protocol,
+        use ``memoryview(const object& obj)`` instead of this constructor.
+     \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Creates ``memoryview`` from static buffer.
+
+        This method is meant for providing a ``memoryview`` for C/C++ buffer not
+        managed by Python. The caller is responsible for managing the lifetime
+        of ``ptr`` and ``format``, which MUST outlive the memoryview constructed
+        here.
+
+        See also: Python C API documentation for `PyMemoryView_FromBuffer`_.
+
+        .. _PyMemoryView_FromBuffer: https://docs.python.org/c-api/memoryview.html#c.PyMemoryView_FromBuffer
+
+        :param ptr: Pointer to the buffer.
+        :param itemsize: Byte size of an element.
+        :param format: Pointer to the null-terminated format string. For
+            homogeneous Buffers, this should be set to
+            ``format_descriptor<T>::value``.
+        :param shape: Shape of the tensor (1 entry per dimension).
+        :param strides: Number of bytes between adjacent entries (for each
+            per dimension).
+        :param readonly: Flag to indicate if the underlying storage may be
+            written to.
+     \endrst */
+
+FILE: include/pybind11/pytypes.h
+    /** \rst
+        Creates ``memoryview`` from static memory.
+
+        This method is meant for providing a ``memoryview`` for C/C++ buffer not
+        managed by Python. The caller is responsible for managing the lifetime
+        of ``mem``, which MUST outlive the memoryview constructed here.
+
+        This method is not available in Python 2.
+
+        See also: Python C API documentation for `PyMemoryView_FromBuffer`_.
+
+        .. _PyMemoryView_FromMemory: https://docs.python.org/c-api/memoryview.html#c.PyMemoryView_FromMemory
+     \endrst */
+
+FILE: include/pybind11/cast.h
+/** \rst
+    String literal version of `arg`
+ \endrst */
+
+FILE: include/pybind11/attr.h
+/** \rst
+    A call policy which places one or more guard variables (``Ts...``) around the function call.
+
+    For example, this definition:
+
+    .. code-block:: cpp
+
+        m.def("foo", foo, py::call_guard<T>());
+
+    is equivalent to the following pseudocode:
+
+    .. code-block:: cpp
+
+        m.def("foo", [](args...) {
+            T scope_guard;
+            return foo(args...); // forwarded arguments
+        });
+ \endrst */
+
+FILE: include/pybind11/embed.h
+/** \rst
+    Add a new module to the table of builtins for the interpreter. Must be
+    defined in global scope. The first macro parameter is the name of the
+    module (without quotes). The second parameter is the variable which will
+    be used as the interface to add functions and classes to the module.
+
+    .. code-block:: cpp
+
+        PYBIND11_EMBEDDED_MODULE(example, m) {
+            // ... initialize functions and classes here
+            m.def("foo", []() {
+                return "Hello, World!";
+            });
+        }
+ \endrst */
+
+FILE: include/pybind11/embed.h
+/** \rst
+    Initialize the Python interpreter. No other pybind11 or CPython API functions can be
+    called before this is done; with the exception of `PYBIND11_EMBEDDED_MODULE`. The
+    optional `init_signal_handlers` parameter can be used to skip the registration of
+    signal handlers (see the `Python documentation`_ for details). Calling this function
+    again after the interpreter has already been initialized is a fatal error.
+
+    If initializing the Python interpreter fails, then the program is terminated.  (This
+    is controlled by the CPython runtime and is an exception to pybind11's normal behavior
+    of throwing exceptions on errors.)
+
+    The remaining optional parameters, `argc`, `argv`, and `add_program_dir_to_path` are
+    used to populate ``sys.argv`` and ``sys.path``.
+    See the |PySys_SetArgvEx documentation|_ for details.
+
+    .. _Python documentation: https://docs.python.org/3/c-api/init.html#c.Py_InitializeEx
+    .. |PySys_SetArgvEx documentation| replace:: ``PySys_SetArgvEx`` documentation
+    .. _PySys_SetArgvEx documentation: https://docs.python.org/3/c-api/init.html#c.PySys_SetArgvEx
+ \endrst */
+
+FILE: include/pybind11/embed.h
+/** \rst
+    Shut down the Python interpreter. No pybind11 or CPython API functions can be called
+    after this. In addition, pybind11 objects must not outlive the interpreter:
+
+    .. code-block:: cpp
+
+        { // BAD
+            py::initialize_interpreter();
+            auto hello = py::str("Hello, World!");
+            py::finalize_interpreter();
+        } // <-- BOOM, hello's destructor is called after interpreter shutdown
+
+        { // GOOD
+            py::initialize_interpreter();
+            { // scoped
+                auto hello = py::str("Hello, World!");
+            } // <-- OK, hello is cleaned up properly
+            py::finalize_interpreter();
+        }
+
+        { // BETTER
+            py::scoped_interpreter guard{};
+            auto hello = py::str("Hello, World!");
+        }
+
+    .. warning::
+
+        The interpreter can be restarted by calling `initialize_interpreter` again.
+        Modules created using pybind11 can be safely re-initialized. However, Python
+        itself cannot completely unload binary extension modules and there are several
+        caveats with regard to interpreter restarting. All the details can be found
+        in the CPython documentation. In short, not all interpreter memory may be
+        freed, either due to reference cycles or user-created global data.
+
+ \endrst */
+
+FILE: include/pybind11/embed.h
+/** \rst
+    Scope guard version of `initialize_interpreter` and `finalize_interpreter`.
+    This a move-only guard and only a single instance can exist.
+
+    See `initialize_interpreter` for a discussion of its constructor arguments.
+
+    .. code-block:: cpp
+
+        #include <pybind11/embed.h>
+
+        int main() {
+            py::scoped_interpreter guard{};
+            py::print(Hello, World!);
+        } // <-- interpreter shutdown
+ \endrst */
+
+FILE: include/pybind11/pybind11.h
+    /** \rst
+        Create Python binding for a new function within the module scope. ``Func``
+        can be a plain C++ function, a function pointer, or a lambda function. For
+        details on the ``Extra&& ... extra`` argument, see section :ref:`extras`.
+    \endrst */
+
+FILE: include/pybind11/pybind11.h
+    /** \rst
+        Create and return a new Python submodule with the given name and docstring.
+        This also works recursively, i.e.
+
+        .. code-block:: cpp
+
+            py::module_ m("example", "pybind11 example plugin");
+            py::module_ m2 = m.def_submodule("sub", "A submodule of 'example'");
+            py::module_ m3 = m2.def_submodule("subsub", "A submodule of 'example.sub'");
+    \endrst */
+
+FILE: include/pybind11/pybind11.h
+    /** \rst
+        Adds an object to the module using the given name.  Throws if an object with the given name
+        already exists.
+
+        ``overwrite`` should almost always be false: attempting to overwrite objects that pybind11 has
+        established will, in most cases, break things.
+    \endrst */
+
+FILE: include/pybind11/pybind11.h
+    /** \rst
+        Create a new top-level module that can be used as the main module of a C extension.
+
+        For Python 3, ``def`` should point to a statically allocated module_def.
+        For Python 2, ``def`` can be a nullptr and is completely ignored.
+    \endrst */
+
+FILE: include/pybind11/pybind11.h
+/** \rst
+  Try to retrieve a python method by the provided name from the instance pointed to by the this_ptr.
+
+  :this_ptr: The pointer to the object the overridden method should be retrieved for. This should be
+             the first non-trampoline class encountered in the inheritance chain.
+  :name: The name of the overridden Python method to retrieve.
+  :return: The Python method by this name from the object or an empty function wrapper.
+ \endrst */
+
+FILE: include/pybind11/pybind11.h
+/** \rst
+    Macro to populate the virtual method in the trampoline class. This macro tries to look up a method named 'fn'
+    from the Python side, deals with the :ref:`gil` and necessary argument conversions to call this method and return
+    the appropriate type. See :ref:`overriding_virtuals` for more information. This macro should be used when the method
+    name in C is not the same as the method name in Python. For example with `__str__`.
+
+    .. code-block:: cpp
+
+      std::string toString() override {
+        PYBIND11_OVERRIDE_NAME(
+            std::string, // Return type (ret_type)
+            Animal,      // Parent class (cname)
+            "__str__",   // Name of method in Python (name)
+            toString,    // Name of function in C++ (fn)
+        );
+      }
+\endrst */
+
+FILE: include/pybind11/pybind11.h
+/** \rst
+    Macro for pure virtual functions, this function is identical to :c:macro:`PYBIND11_OVERRIDE_NAME`, except that it
+    throws if no override can be found.
+\endrst */
+
+FILE: include/pybind11/pybind11.h
+/** \rst
+    Macro to populate the virtual method in the trampoline class. This macro tries to look up the method
+    from the Python side, deals with the :ref:`gil` and necessary argument conversions to call this method and return
+    the appropriate type. This macro should be used if the method name in C and in Python are identical.
+    See :ref:`overriding_virtuals` for more information.
+
+    .. code-block:: cpp
+
+      class PyAnimal : public Animal {
+      public:
+          // Inherit the constructors
+          using Animal::Animal;
+
+          // Trampoline (need one for each virtual function)
+          std::string go(int n_times) override {
+              PYBIND11_OVERRIDE_PURE(
+                  std::string, // Return type (ret_type)
+                  Animal,      // Parent class (cname)
+                  go,          // Name of function in C++ (must match Python name) (fn)
+                  n_times      // Argument(s) (...)
+              );
+          }
+      };
+\endrst */
+
+FILE: include/pybind11/pybind11.h
+/** \rst
+    Macro for pure virtual functions, this function is identical to :c:macro:`PYBIND11_OVERRIDE`, except that it throws
+    if no override can be found.
+\endrst */
+
+FILE: include/pybind11/iostream.h
+/** \rst
+    This a move-only guard that redirects output.
+
+    .. code-block:: cpp
+
+        #include <pybind11/iostream.h>
+
+        ...
+
+        {
+            py::scoped_ostream_redirect output;
+            std::cout << "Hello, World!"; // Python stdout
+        } // <-- return std::cout to normal
+
+    You can explicitly pass the c++ stream and the python object,
+    for example to guard stderr instead.
+
+    .. code-block:: cpp
+
+        {
+            py::scoped_ostream_redirect output{std::cerr, py::module::import("sys").attr("stderr")};
+            std::cout << "Hello, World!";
+        }
+ \endrst */
+
+FILE: include/pybind11/iostream.h
+/** \rst
+    Like `scoped_ostream_redirect`, but redirects cerr by default. This class
+    is provided primary to make ``py::call_guard`` easier to make.
+
+    .. code-block:: cpp
+
+     m.def("noisy_func", &noisy_func,
+           py::call_guard<scoped_ostream_redirect,
+                          scoped_estream_redirect>());
+
+\endrst */
+
+FILE: include/pybind11/iostream.h
+/** \rst
+    This is a helper function to add a C++ redirect context manager to Python
+    instead of using a C++ guard. To use it, add the following to your binding code:
+
+    .. code-block:: cpp
+
+        #include <pybind11/iostream.h>
+
+        ...
+
+        py::add_ostream_redirect(m, "ostream_redirect");
+
+    You now have a Python context manager that redirects your output:
+
+    .. code-block:: python
+
+        with m.ostream_redirect():
+            m.print_to_cout_function()
+
+    This manager can optionally be told which streams to operate on:
+
+    .. code-block:: python
+
+        with m.ostream_redirect(stdout=true, stderr=true):
+            m.noisy_function_with_error_printing()
+
+ \endrst */
+
+FILE: include/pybind11/detail/common.h
+/** \rst
+    ***Deprecated in favor of PYBIND11_MODULE***
+
+    This macro creates the entry point that will be invoked when the Python interpreter
+    imports a plugin library. Please create a `module_` in the function body and return
+    the pointer to its underlying Python object at the end.
+
+    .. code-block:: cpp
+
+        PYBIND11_PLUGIN(example) {
+            pybind11::module_ m("example", "pybind11 example plugin");
+            /// Set up bindings here
+            return m.ptr();
+        }
+\endrst */
+
+FILE: include/pybind11/detail/common.h
+/** \rst
+    This macro creates the entry point that will be invoked when the Python interpreter
+    imports an extension module. The module name is given as the fist argument and it
+    should not be in quotes. The second macro argument defines a variable of type
+    `py::module_` which can be used to initialize the module.
+
+    The entry point is marked as "maybe unused" to aid dead-code detection analysis:
+    since the entry point is typically only looked up at runtime and not referenced
+    during translation, it would otherwise appear as unused ("dead") code.
+
+    .. code-block:: cpp
+
+        PYBIND11_MODULE(example, m) {
+            m.doc() = "pybind11 example module";
+
+            // Add bindings here
+            m.def("foo", []() {
+                return "Hello, World!";
+            });
+        }
+\endrst */
+
