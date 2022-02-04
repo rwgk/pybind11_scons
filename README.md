@@ -6,6 +6,8 @@ Status: a minimal working start, no bells or whistles.
 Example usage:
 
 ```
+sudo apt install scons  # Or similar, depending on platform (if not installed already).
+
 mkdir workspace
 git clone https://github.com/rwgk/pybind11_scons.git
 git clone https://github.com/catchorg/Catch2.git
