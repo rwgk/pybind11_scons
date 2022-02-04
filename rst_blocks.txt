@@ -193,7 +193,8 @@ FILE: include/pybind11/pytypes.h
 
         See also: Python C API documentation for `PyMemoryView_FromBuffer`_.
 
-        .. _PyMemoryView_FromBuffer: https://docs.python.org/c-api/memoryview.html#c.PyMemoryView_FromBuffer
+        .. _PyMemoryView_FromBuffer:
+     https://docs.python.org/c-api/memoryview.html#c.PyMemoryView_FromBuffer
 
         :param ptr: Pointer to the buffer.
         :param itemsize: Byte size of an element.
@@ -219,8 +220,8 @@ FILE: include/pybind11/pytypes.h
 
         See also: Python C API documentation for `PyMemoryView_FromBuffer`_.
 
-        .. _PyMemoryView_FromMemory: https://docs.python.org/c-api/memoryview.html#c.PyMemoryView_FromMemory
-     \endrst */
+        .. _PyMemoryView_FromMemory:
+     https://docs.python.org/c-api/memoryview.html#c.PyMemoryView_FromMemory \endrst */
 
 FILE: include/pybind11/cast.h
 /** \rst
@@ -363,9 +364,8 @@ FILE: include/pybind11/pybind11.h
         Adds an object to the module using the given name.  Throws if an object with the given name
         already exists.
 
-        ``overwrite`` should almost always be false: attempting to overwrite objects that pybind11 has
-        established will, in most cases, break things.
-    \endrst */
+        ``overwrite`` should almost always be false: attempting to overwrite objects that pybind11
+    has established will, in most cases, break things. \endrst */
 
 FILE: include/pybind11/pybind11.h
     /** \rst
@@ -377,20 +377,21 @@ FILE: include/pybind11/pybind11.h
 
 FILE: include/pybind11/pybind11.h
 /** \rst
-  Try to retrieve a python method by the provided name from the instance pointed to by the this_ptr.
+  Try to retrieve a python method by the provided name from the instance pointed to by the
+ this_ptr.
 
-  :this_ptr: The pointer to the object the overridden method should be retrieved for. This should be
-             the first non-trampoline class encountered in the inheritance chain.
-  :name: The name of the overridden Python method to retrieve.
-  :return: The Python method by this name from the object or an empty function wrapper.
- \endrst */
+  :this_ptr: The pointer to the object the overridden method should be retrieved for. This should
+ be the first non-trampoline class encountered in the inheritance chain. :name: The name of the
+ overridden Python method to retrieve. :return: The Python method by this name from the object or
+ an empty function wrapper. \endrst */
 
 FILE: include/pybind11/pybind11.h
 /** \rst
-    Macro to populate the virtual method in the trampoline class. This macro tries to look up a method named 'fn'
-    from the Python side, deals with the :ref:`gil` and necessary argument conversions to call this method and return
-    the appropriate type. See :ref:`overriding_virtuals` for more information. This macro should be used when the method
-    name in C is not the same as the method name in Python. For example with `__str__`.
+    Macro to populate the virtual method in the trampoline class. This macro tries to look up a
+method named 'fn' from the Python side, deals with the :ref:`gil` and necessary argument
+conversions to call this method and return the appropriate type. See :ref:`overriding_virtuals` for
+more information. This macro should be used when the method name in C is not the same as the method
+name in Python. For example with `__str__`.
 
     .. code-block:: cpp
 
@@ -406,16 +407,15 @@ FILE: include/pybind11/pybind11.h
 
 FILE: include/pybind11/pybind11.h
 /** \rst
-    Macro for pure virtual functions, this function is identical to :c:macro:`PYBIND11_OVERRIDE_NAME`, except that it
-    throws if no override can be found.
-\endrst */
+    Macro for pure virtual functions, this function is identical to
+:c:macro:`PYBIND11_OVERRIDE_NAME`, except that it throws if no override can be found. \endrst */
 
 FILE: include/pybind11/pybind11.h
 /** \rst
-    Macro to populate the virtual method in the trampoline class. This macro tries to look up the method
-    from the Python side, deals with the :ref:`gil` and necessary argument conversions to call this method and return
-    the appropriate type. This macro should be used if the method name in C and in Python are identical.
-    See :ref:`overriding_virtuals` for more information.
+    Macro to populate the virtual method in the trampoline class. This macro tries to look up the
+method from the Python side, deals with the :ref:`gil` and necessary argument conversions to call
+this method and return the appropriate type. This macro should be used if the method name in C and
+in Python are identical. See :ref:`overriding_virtuals` for more information.
 
     .. code-block:: cpp
 
@@ -438,9 +438,8 @@ FILE: include/pybind11/pybind11.h
 
 FILE: include/pybind11/pybind11.h
 /** \rst
-    Macro for pure virtual functions, this function is identical to :c:macro:`PYBIND11_OVERRIDE`, except that it throws
-    if no override can be found.
-\endrst */
+    Macro for pure virtual functions, this function is identical to :c:macro:`PYBIND11_OVERRIDE`,
+except that it throws if no override can be found. \endrst */
 
 FILE: include/pybind11/iostream.h
 /** \rst
@@ -463,8 +462,8 @@ FILE: include/pybind11/iostream.h
     .. code-block:: cpp
 
         {
-            py::scoped_ostream_redirect output{std::cerr, py::module::import("sys").attr("stderr")};
-            std::cout << "Hello, World!";
+            py::scoped_ostream_redirect output{std::cerr,
+ py::module::import("sys").attr("stderr")}; std::cout << "Hello, World!";
         }
  \endrst */
 
