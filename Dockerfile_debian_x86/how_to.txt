@@ -1,0 +1,18 @@
+Usual build & test
+------------------
+cmake -S /mounted_pybind11/ -B build -DDOWNLOAD_EIGEN=ON -DDOWNLOAD_CATCH=ON -DCMAKE_CXX_STANDARD=11
+cmake --build build --verbose -j 16 -- --keep-going
+cmake --build build --target pytest
+
+
+CI install-classic
+------------------
+cp -a /mounted_pybind11 pybind11
+cd pybind11
+cmake . -DPYBIND11_INSTALL=1 -DPYBIND11_TEST=0 -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")
+make install
+cp -a tests /pybind11-tests
+mkdir /build-tests
+cd /build-tests
+cmake ../pybind11-tests -DDOWNLOAD_CATCH=ON -DPYBIND11_WERROR=ON -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")
+make pytest -j 16
