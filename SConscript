@@ -50,9 +50,15 @@ def process_meta_opts():
         result = True
     return result
 
-  if have_meta_opt("lto"):
-    global opt_opt
+  global opt_opt
+  lto = False
+  if have_meta_opt("ltos"):
     opt_opt = ["-Os"]
+    lto = True
+  elif have_meta_opt("lto3"):
+    opt_opt = ["-O3"]
+    lto = True
+  if lto:
     opt_opt.append("-flto")
     if build_config_compiler == "linux_gcc":
       opt_opt.append("-fno-fat-lto-objects")
@@ -111,6 +117,7 @@ pybind11_tests_shared_library(
 
 for main_module in [
     "cross_module_gil_utils",
+    "cross_module_interleaved_error_already_set",
     "pybind11_cross_module_tests",
     "class_sh_module_local_0",
     "class_sh_module_local_1",
