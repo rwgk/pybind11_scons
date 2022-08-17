@@ -34,10 +34,11 @@ elif build_config_compiler == "linux_gcc":
 std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
 opt_opt = ["-O0", "-g"]
-wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor", "-Wunused-result"]
+wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor", "-Wunused-result", "-Werror"]
 
 extra_defines = arguments_get_split("extra_defines")
 extra_defines.append("PYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX")
+extra_defines.append("PYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE")
 
 def process_meta_opts():
   meta_opts = arguments_get_split("meta_opts")
@@ -122,11 +123,17 @@ for main_module in [
     "class_sh_module_local_0",
     "class_sh_module_local_1",
     "class_sh_module_local_2",
+    "namespace_visibility_2",
 ]:
   if Glob("#pybind11/tests/%s.cpp" % main_module):
     pybind11_tests_shared_library(
         target="#lib/%s" % main_module,
         sources=["%s.cpp" % main_module])
+
+if Glob("#pybind11/tests/namespace_visibility_1.cpp"):
+  pybind11_tests_shared_library(
+      target="#lib/namespace_visibility_1",
+      sources=["namespace_visibility_1.cpp", "namespace_visibility_1s.cpp"])
 
 env_base.Clone(
     CPPDEFINES = extra_defines,
@@ -144,7 +151,7 @@ env_base.Clone(
              python_include,
              "#Catch2/single_include/catch2"],
     CXXFLAGS=std_opt + opt_opt + wrn_opt,
-    LINKFLAGS=["-rdynamic"] + opt_opt,
+    LINKFLAGS=["-Llib", "-rdynamic"] + opt_opt,
     LIBS=[python_lib, "pthread", "dl", "util"]).Program(
         target="#bin/test_embed",
         source=build_paths_in_subdir(
