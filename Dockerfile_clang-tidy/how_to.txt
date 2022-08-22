@@ -1,0 +1,2 @@
+cmake -S /mounted_pybind11/ -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_CLANG_TIDY="$(which clang-tidy);-fix" -DDOWNLOAD_EIGEN=ON -DDOWNLOAD_CATCH=ON -DCMAKE_CXX_STANDARD=17
+cmake --build build -j 16 -- --keep-going
