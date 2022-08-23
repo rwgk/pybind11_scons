@@ -15,7 +15,8 @@ def build_list_of_tests(tests_dirpath, substrings):
   all_test_py = []
   for node in os.listdir(tests_dirpath):
     if ((node.startswith("test_class_sh_") and node.endswith(".py")) or
-        node == "test_exc_namespace_visibility.py"):
+        node in ("test_namespace_visibility.py",
+                 "test_exc_namespace_visibility")):
       all_test_py.append(node)
       continue
     if not node.startswith("test_") or not node.endswith(".cpp"):
@@ -135,7 +136,7 @@ def run(args):
   tests_dirpath = os.path.join(pybind11_dirpath, "tests")
   test_embed_dirpath = os.path.join(tests_dirpath, "test_embed")
   test_embed, list_of_test_py = build_list_of_tests(tests_dirpath, substrings)
-  env = {"PYTHONPATH": normabspath("lib") + ":/foo/bar"}
+  env = {"PYTHONPATH": normabspath("lib")}
   if test_embed:
     print('Running tests in directory "%s":' % test_embed_dirpath)
     sys.stdout.flush()
