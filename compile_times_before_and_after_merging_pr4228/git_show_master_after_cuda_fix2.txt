@@ -1,0 +1,147 @@
+commit da104a9efd0357b5c144c67eb641ae0b9e23012d
+Author: Ralf W. Grosse-Kunstleve <rwgk@google.com>
+Date:   Sun Oct 9 21:50:35 2022 -0700
+
+    Reproducer and fix for issue encountered in smart_holder update. (#4228)
+    
+    * Reproducer for issue encountered in smart_holder update.
+    
+    * clang-tidy compatibility (untested).
+    
+    * Add `enable_if_t` to workaround.
+    
+    * Bug fix: Move `PYBIND11_USING_WORKAROUND_FOR_CUDA_11_4_THROUGH_8` determination to detail/common.h
+    
+    So that it actually is defined in pybind11.h
+    
+    * Try using the workaround (which is nicer than the original code) universally.
+    
+    * Reduce reproducer for CUDA 11.7 issue encountered in smart_holder update.
+    
+    This commit tested in isolation on top of current master + first version of reproducer (62311eb431849d135a5db84f6c75ec390f2ede7c).
+    
+    Succeeds with Debian Clang 14.0.6 C++17 (and probably all other compilers).
+    
+    Fails for CUDA 11.7:
+    
+    ```
+    cd /build/tests && /usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -Dpybind11_tests_EXPORTS -I/mounted_pybind11/include -isystem=/usr/include/python3.10 -g --generate-code=arch=compute_52,code=[compute_52,sm_52] -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden -Werror all-warnings -std=c++17 -MD -MT tests/CMakeFiles/pybind11_tests.dir/test_class.cpp.o -MF CMakeFiles/pybind11_tests.dir/test_class.cpp.o.d -x cu -c /mounted_pybind11/tests/test_class.cpp -o CMakeFiles/pybind11_tests.dir/test_class.cpp.o
+    /mounted_pybind11/tests/test_class.cpp(53): error: more than one instance of overloaded function "pybind11::class_<type_, options...>::def [with type_=test_class::pr4220_tripped_over_this::Empty0, options=<>]" matches the argument list:
+                function template "pybind11::class_<test_class::pr4220_tripped_over_this::Empty0> &pybind11::class_<type_, options...>::def(const char *, Func &&, const Extra &...) [with type_=test_class::pr4220_tripped_over_this::Empty0, options=<>]"
+    /mounted_pybind11/include/pybind11/pybind11.h(1557): here
+                function template "pybind11::class_<test_class::pr4220_tripped_over_this::Empty0> &pybind11::class_<type_, options...>::def(const T &, const Extra &...) [with type_=test_class::pr4220_tripped_over_this::Empty0, options=<>]"
+    /mounted_pybind11/include/pybind11/pybind11.h(1586): here
+                argument types are: (const char [8], <unknown-type>)
+                object type is: pybind11::class_<test_class::pr4220_tripped_over_this::Empty0>
+    
+    1 error detected in the compilation of "/mounted_pybind11/tests/test_class.cpp".
+    ```
+
+diff --git a/include/pybind11/operators.h b/include/pybind11/operators.h
+index a0c3b78d..16a88ae1 100644
+--- a/include/pybind11/operators.h
++++ b/include/pybind11/operators.h
+@@ -84,6 +84,7 @@ struct op_impl {};
+ /// Operator implementation generator
+ template <op_id id, op_type ot, typename L, typename R>
+ struct op_ {
++    static constexpr bool op_enable_if_hook = true;
+     template <typename Class, typename... Extra>
+     void execute(Class &cl, const Extra &...extra) const {
+         using Base = typename Class::type;
+diff --git a/include/pybind11/pybind11.h b/include/pybind11/pybind11.h
+index 3f6e27b7..fb4b7578 100644
+--- a/include/pybind11/pybind11.h
++++ b/include/pybind11/pybind11.h
+@@ -1578,34 +1578,17 @@ public:
+         return *this;
+     }
+ 
+-// Nvidia's NVCC is broken between 11.4.0 and 11.8.0
+-//   https://github.com/pybind/pybind11/issues/4193
+-#if defined(__CUDACC__) && (__CUDACC_VER_MAJOR__ == 11) && (__CUDACC_VER_MINOR__ >= 4)            \
+-    && (__CUDACC_VER_MINOR__ <= 8)
+-    template <typename T, typename... Extra>
++    template <typename T, typename... Extra, detail::enable_if_t<T::op_enable_if_hook, int> = 0>
+     class_ &def(const T &op, const Extra &...extra) {
+         op.execute(*this, extra...);
+         return *this;
+     }
+ 
+-    template <typename T, typename... Extra>
++    template <typename T, typename... Extra, detail::enable_if_t<T::op_enable_if_hook, int> = 0>
+     class_ &def_cast(const T &op, const Extra &...extra) {
+         op.execute_cast(*this, extra...);
+         return *this;
+     }
+-#else
+-    template <detail::op_id id, detail::op_type ot, typename L, typename R, typename... Extra>
+-    class_ &def(const detail::op_<id, ot, L, R> &op, const Extra &...extra) {
+-        op.execute(*this, extra...);
+-        return *this;
+-    }
+-
+-    template <detail::op_id id, detail::op_type ot, typename L, typename R, typename... Extra>
+-    class_ &def_cast(const detail::op_<id, ot, L, R> &op, const Extra &...extra) {
+-        op.execute_cast(*this, extra...);
+-        return *this;
+-    }
+-#endif
+ 
+     template <typename... Args, typename... Extra>
+     class_ &def(const detail::initimpl::constructor<Args...> &init, const Extra &...extra) {
+diff --git a/tests/test_class.cpp b/tests/test_class.cpp
+index c8b8071d..18c8d358 100644
+--- a/tests/test_class.cpp
++++ b/tests/test_class.cpp
+@@ -36,6 +36,26 @@ struct NoBraceInitialization {
+     std::vector<int> vec;
+ };
+ 
++namespace test_class {
++namespace pr4220_tripped_over_this { // PR #4227
++
++template <int>
++struct SoEmpty {};
++
++template <typename T>
++std::string get_msg(const T &) {
++    return "This is really only meant to exercise successful compilation.";
++}
++
++using Empty0 = SoEmpty<0x0>;
++
++void bind_empty0(py::module_ &m) {
++    py::class_<Empty0>(m, "Empty0").def(py::init<>()).def("get_msg", get_msg<Empty0>);
++}
++
++} // namespace pr4220_tripped_over_this
++} // namespace test_class
++
+ TEST_SUBMODULE(class_, m) {
+     // test_instance
+     struct NoConstructor {
+@@ -517,6 +537,8 @@ TEST_SUBMODULE(class_, m) {
+         py::class_<OtherDuplicateNested>(gt, "OtherDuplicateNested");
+         py::class_<OtherDuplicateNested>(gt, "YetAnotherDuplicateNested");
+     });
++
++    test_class::pr4220_tripped_over_this::bind_empty0(m);
+ }
+ 
+ template <int N>
+diff --git a/tests/test_class.py b/tests/test_class.py
+index ff9196f0..47ba450f 100644
+--- a/tests/test_class.py
++++ b/tests/test_class.py
+@@ -469,3 +469,10 @@ def test_register_duplicate_class():
+         m.register_duplicate_nested_class_type(ClassScope)
+     expected = 'generic_type: type "YetAnotherDuplicateNested" is already registered!'
+     assert str(exc_info.value) == expected
++
++
++def test_pr4220_tripped_over_this():
++    assert (
++        m.Empty0().get_msg()
++        == "This is really only meant to exercise successful compilation."
++    )

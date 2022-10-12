@@ -1,0 +1,269 @@
+scons: Reading SConscript files ...
+scons: done reading SConscript files.
+scons: Building targets ...
+time_clang++ -o pybind11/tests/test_embed/test_interpreter.o -c -std=c++17 -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include -I/usr/include/python3.10 -ICatch2/single_include/catch2 -I/usr/local/google/home/rwgk/forked/Catch2/single_include/catch2 -I/usr/local/google/home/rwgk/clone/Catch2/single_include/catch2 /usr/local/google/home/rwgk/forked/pybind11/tests/test_embed/test_interpreter.cpp
+
+real	0m8.668s
+user	0m8.264s
+sys	0m0.387s
+time_clang++ -o pybind11/tests/test_embed/catch.o -c -std=c++17 -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include -I/usr/include/python3.10 -ICatch2/single_include/catch2 -I/usr/local/google/home/rwgk/forked/Catch2/single_include/catch2 -I/usr/local/google/home/rwgk/clone/Catch2/single_include/catch2 /usr/local/google/home/rwgk/forked/pybind11/tests/test_embed/catch.cpp
+
+real	0m20.809s
+user	0m20.213s
+sys	0m0.551s
+time_clang++ -o bin/test_embed -Llib -rdynamic -Os -flto pybind11/tests/test_embed/test_interpreter.o pybind11/tests/test_embed/catch.o -lpython3.10 -lpthread -ldl -lutil
+
+real	0m12.279s
+user	0m12.039s
+sys	0m0.210s
+time_clang++ -o pybind11/tests/cross_module_gil_utils.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/cross_module_gil_utils.cpp
+
+real	0m5.181s
+user	0m4.906s
+sys	0m0.252s
+time_clang++ -o lib/cross_module_gil_utils.so -shared -fPIC -Os -flto -shared pybind11/tests/cross_module_gil_utils.os
+
+real	0m1.549s
+user	0m1.423s
+sys	0m0.125s
+time_clang++ -o pybind11/tests/cross_module_interleaved_error_already_set.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/cross_module_interleaved_error_already_set.cpp
+
+real	0m4.987s
+user	0m4.757s
+sys	0m0.215s
+time_clang++ -o lib/cross_module_interleaved_error_already_set.so -shared -fPIC -Os -flto -shared pybind11/tests/cross_module_interleaved_error_already_set.os
+
+real	0m1.558s
+user	0m1.457s
+sys	0m0.093s
+time_clang++ -o pybind11/tests/test_embed/external_module.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include -I/usr/include/python3.10 /usr/local/google/home/rwgk/forked/pybind11/tests/test_embed/external_module.cpp
+
+real	0m5.827s
+user	0m5.516s
+sys	0m0.288s
+time_clang++ -o lib/external_module.so -shared -fPIC -Os -flto -shared pybind11/tests/test_embed/external_module.os
+
+real	0m2.060s
+user	0m1.951s
+sys	0m0.100s
+time_clang++ -o pybind11/tests/pybind11_cross_module_tests.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/pybind11_cross_module_tests.cpp
+
+real	0m23.437s
+user	0m22.656s
+sys	0m0.732s
+time_clang++ -o lib/pybind11_cross_module_tests.so -shared -fPIC -Os -flto -shared pybind11/tests/pybind11_cross_module_tests.os
+
+real	0m8.219s
+user	0m8.028s
+sys	0m0.177s
+time_clang++ -o pybind11/tests/pybind11_tests.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/pybind11_tests.cpp
+
+real	0m7.826s
+user	0m7.462s
+sys	0m0.356s
+time_clang++ -o pybind11/tests/test_async.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_async.cpp
+
+real	0m6.337s
+user	0m6.023s
+sys	0m0.305s
+time_clang++ -o pybind11/tests/test_buffers.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_buffers.cpp
+
+real	0m10.359s
+user	0m9.968s
+sys	0m0.382s
+time_clang++ -o pybind11/tests/test_builtin_casters.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_builtin_casters.cpp
+
+real	0m13.886s
+user	0m13.348s
+sys	0m0.491s
+time_clang++ -o pybind11/tests/test_call_policies.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_call_policies.cpp
+
+real	0m8.233s
+user	0m7.784s
+sys	0m0.419s
+time_clang++ -o pybind11/tests/test_callbacks.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_callbacks.cpp
+
+real	0m11.780s
+user	0m11.316s
+sys	0m0.425s
+time_clang++ -o pybind11/tests/test_chrono.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_chrono.cpp
+
+real	0m9.119s
+user	0m8.655s
+sys	0m0.434s
+time_clang++ -o pybind11/tests/test_class.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_class.cpp
+
+real	0m17.610s
+user	0m17.024s
+sys	0m0.538s
+time_clang++ -o pybind11/tests/test_const_name.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_const_name.cpp
+
+real	0m6.760s
+user	0m6.438s
+sys	0m0.297s
+time_clang++ -o pybind11/tests/test_constants_and_functions.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_constants_and_functions.cpp
+
+real	0m8.139s
+user	0m7.815s
+sys	0m0.294s
+time_clang++ -o pybind11/tests/test_copy_move.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_copy_move.cpp
+
+real	0m9.695s
+user	0m9.277s
+sys	0m0.401s
+time_clang++ -o pybind11/tests/test_custom_type_casters.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_custom_type_casters.cpp
+
+real	0m7.586s
+user	0m7.295s
+sys	0m0.284s
+time_clang++ -o pybind11/tests/test_custom_type_setup.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_custom_type_setup.cpp
+
+real	0m5.930s
+user	0m5.680s
+sys	0m0.236s
+time_clang++ -o pybind11/tests/test_docstring_options.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_docstring_options.cpp
+
+real	0m6.173s
+user	0m5.866s
+sys	0m0.289s
+time_clang++ -o pybind11/tests/test_eigen.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_eigen.cpp
+
+real	0m23.336s
+user	0m22.577s
+sys	0m0.700s
+time_clang++ -o pybind11/tests/test_enum.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_enum.cpp
+
+real	0m9.895s
+user	0m9.550s
+sys	0m0.320s
+time_clang++ -o pybind11/tests/test_eval.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_eval.cpp
+
+real	0m5.674s
+user	0m5.406s
+sys	0m0.252s
+time_clang++ -o pybind11/tests/test_exceptions.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_exceptions.cpp
+
+real	0m6.310s
+user	0m6.007s
+sys	0m0.269s
+time_clang++ -o pybind11/tests/test_factory_constructors.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_factory_constructors.cpp
+
+real	0m14.068s
+user	0m13.505s
+sys	0m0.533s
+time_clang++ -o pybind11/tests/test_gil_scoped.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_gil_scoped.cpp
+
+real	0m6.186s
+user	0m5.830s
+sys	0m0.324s
+time_clang++ -o pybind11/tests/test_iostream.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_iostream.cpp
+
+real	0m6.807s
+user	0m6.458s
+sys	0m0.336s
+time_clang++ -o pybind11/tests/test_kwargs_and_defaults.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_kwargs_and_defaults.cpp
+
+real	0m8.555s
+user	0m8.213s
+sys	0m0.320s
+time_clang++ -o pybind11/tests/test_local_bindings.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_local_bindings.cpp
+
+real	0m19.824s
+user	0m19.156s
+sys	0m0.634s
+time_clang++ -o pybind11/tests/test_methods_and_attributes.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_methods_and_attributes.cpp
+
+real	0m14.624s
+user	0m13.968s
+sys	0m0.604s
+time_clang++ -o pybind11/tests/test_modules.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_modules.cpp
+
+real	0m8.544s
+user	0m8.173s
+sys	0m0.348s
+time_clang++ -o pybind11/tests/test_multiple_inheritance.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_multiple_inheritance.cpp
+
+real	0m15.458s
+user	0m14.882s
+sys	0m0.549s
+time_clang++ -o pybind11/tests/test_numpy_array.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_numpy_array.cpp
+
+real	0m15.490s
+user	0m15.040s
+sys	0m0.409s
+time_clang++ -o pybind11/tests/test_numpy_dtypes.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_numpy_dtypes.cpp
+
+real	0m11.249s
+user	0m10.848s
+sys	0m0.383s
+time_clang++ -o pybind11/tests/test_numpy_vectorize.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_numpy_vectorize.cpp
+
+real	0m10.425s
+user	0m10.096s
+sys	0m0.293s
+time_clang++ -o pybind11/tests/test_opaque_types.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_opaque_types.cpp
+
+real	0m7.462s
+user	0m7.117s
+sys	0m0.319s
+time_clang++ -o pybind11/tests/test_operator_overloading.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_operator_overloading.cpp
+
+real	0m9.962s
+user	0m9.543s
+sys	0m0.395s
+time_clang++ -o pybind11/tests/test_pickling.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_pickling.cpp
+
+real	0m8.213s
+user	0m7.828s
+sys	0m0.368s
+time_clang++ -o pybind11/tests/test_pytypes.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_pytypes.cpp
+
+real	0m13.018s
+user	0m12.533s
+sys	0m0.440s
+time_clang++ -o pybind11/tests/test_sequences_and_iterators.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_sequences_and_iterators.cpp
+
+real	0m16.190s
+user	0m15.671s
+sys	0m0.500s
+time_clang++ -o pybind11/tests/test_smart_ptr.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_smart_ptr.cpp
+
+real	0m13.826s
+user	0m13.284s
+sys	0m0.507s
+time_clang++ -o pybind11/tests/test_stl.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_stl.cpp
+
+real	0m18.695s
+user	0m18.036s
+sys	0m0.619s
+time_clang++ -o pybind11/tests/test_stl_binders.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_stl_binders.cpp
+
+real	0m43.470s
+user	0m41.920s
+sys	0m1.485s
+time_clang++ -o pybind11/tests/test_tagbased_polymorphic.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_tagbased_polymorphic.cpp
+
+real	0m7.679s
+user	0m7.363s
+sys	0m0.293s
+time_clang++ -o pybind11/tests/test_thread.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_thread.cpp
+
+real	0m6.051s
+user	0m5.799s
+sys	0m0.242s
+time_clang++ -o pybind11/tests/test_union.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_union.cpp
+
+real	0m5.740s
+user	0m5.467s
+sys	0m0.256s
+time_clang++ -o pybind11/tests/test_virtual_functions.os -c -std=c++17 -fPIC -fvisibility=hidden -Os -flto -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -Wunused-result -Werror -isystem /usr/include/python3.10 -isystem /usr/include/eigen3 -DPYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX -DPYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE -DPYBIND11_TEST_BOOST -Ipybind11/include -I/usr/local/google/home/rwgk/forked/pybind11/include -I/usr/local/google/home/rwgk/clone/pybind11/include /usr/local/google/home/rwgk/forked/pybind11/tests/test_virtual_functions.cpp
+
+real	0m11.580s
+user	0m11.136s
+sys	0m0.404s
+time_clang++ -o lib/pybind11_tests.so -shared -fPIC -Os -flto -shared pybind11/tests/pybind11_tests.os pybind11/tests/test_async.os pybind11/tests/test_buffers.os pybind11/tests/test_builtin_casters.os pybind11/tests/test_call_policies.os pybind11/tests/test_callbacks.os pybind11/tests/test_chrono.os pybind11/tests/test_class.os pybind11/tests/test_const_name.os pybind11/tests/test_constants_and_functions.os pybind11/tests/test_copy_move.os pybind11/tests/test_custom_type_casters.os pybind11/tests/test_custom_type_setup.os pybind11/tests/test_docstring_options.os pybind11/tests/test_eigen.os pybind11/tests/test_enum.os pybind11/tests/test_eval.os pybind11/tests/test_exceptions.os pybind11/tests/test_factory_constructors.os pybind11/tests/test_gil_scoped.os pybind11/tests/test_iostream.os pybind11/tests/test_kwargs_and_defaults.os pybind11/tests/test_local_bindings.os pybind11/tests/test_methods_and_attributes.os pybind11/tests/test_modules.os pybind11/tests/test_multiple_inheritance.os pybind11/tests/test_numpy_array.os pybind11/tests/test_numpy_dtypes.os pybind11/tests/test_numpy_vectorize.os pybind11/tests/test_opaque_types.os pybind11/tests/test_operator_overloading.os pybind11/tests/test_pickling.os pybind11/tests/test_pytypes.os pybind11/tests/test_sequences_and_iterators.os pybind11/tests/test_smart_ptr.os pybind11/tests/test_stl.os pybind11/tests/test_stl_binders.os pybind11/tests/test_tagbased_polymorphic.os pybind11/tests/test_thread.os pybind11/tests/test_union.os pybind11/tests/test_virtual_functions.os
+
+real	1m31.062s
+user	1m29.836s
+sys	0m1.055s
+scons: done building targets.

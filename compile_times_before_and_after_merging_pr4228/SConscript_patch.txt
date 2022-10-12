@@ -1,0 +1,13 @@
+diff --git a/SConscript b/SConscript
+index 3a57401..32a248e 100644
+--- a/SConscript
++++ b/SConscript
+@@ -28,7 +28,7 @@ def arguments_get_split(key, sep=","):
+ 
+ build_config_compiler = pybind11_build_config["compiler"]
+ if build_config_compiler == "linux_clang":
+-  cxx = "clang++"
++  cxx = "time_clang++"
+ elif build_config_compiler == "linux_gcc":
+   cxx = "g++"
+ std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]

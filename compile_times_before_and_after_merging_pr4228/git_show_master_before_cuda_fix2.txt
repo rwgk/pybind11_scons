@@ -1,0 +1,110 @@
+commit 7c6f2f80a73e330642226138ae3ddaf448a4f672
+Author: Daniel Galvez <galv@users.noreply.github.com>
+Date:   Fri Oct 7 12:27:54 2022 -0700
+
+    fix: PyCapsule_GetDestructor is allowed to return a nullptr destructor (#4221)
+    
+    * fix: PyCapsule_GetDestructor is allowed to return a nullptr destructor
+    
+    Previously, this code would error out if the destructor happened to be
+    a nullptr. This is incorrect. nullptrs are allowed for capsule
+    destructors.
+    
+    "It is legal for a capsule to have a NULL destructor. This makes a
+    NULL return code somewhat ambiguous; use PyCapsule_IsValid() or
+    PyErr_Occurred() to disambiguate."
+    
+    See:
+    
+    https://docs.python.org/3/c-api/capsule.html#c.PyCapsule_GetDestructor
+    
+    I noticed this while working on a type caster related to #3858 DLPack
+    happens to allow the destructor not to be defined on a capsule, and I
+    encountered such a case. See:
+    
+    https://github.com/dmlc/dlpack/blob/e2bdd3bee8cb6501558042633fa59144cc8b7f5f/include/dlpack/dlpack.h#L219
+    
+    * Add test for the fix.
+    
+    * Update tests/test_pytypes.cpp
+    
+    I tried this locally and it works!
+    I never knew that there are cases where `reinterpret_cast` does not work but `static_cast` does. Let's see if all compilers are happy with this.
+    
+    Co-authored-by: Aaron Gokaslan <skylion.aaron@gmail.com>
+    
+    * style: pre-commit fixes
+    
+    Co-authored-by: Ralf W. Grosse-Kunstleve <rwgk@google.com>
+    Co-authored-by: Ralf W. Grosse-Kunstleve <rwgkio@gmail.com>
+    Co-authored-by: Aaron Gokaslan <skylion.aaron@gmail.com>
+    Co-authored-by: pre-commit-ci[bot] <66853113+pre-commit-ci[bot]@users.noreply.github.com>
+
+diff --git a/include/pybind11/pytypes.h b/include/pybind11/pytypes.h
+index 565df437..29506b7e 100644
+--- a/include/pybind11/pytypes.h
++++ b/include/pybind11/pytypes.h
+@@ -1829,18 +1829,18 @@ public:
+             // guard if destructor called while err indicator is set
+             error_scope error_guard;
+             auto destructor = reinterpret_cast<void (*)(void *)>(PyCapsule_GetContext(o));
+-            if (destructor == nullptr) {
+-                if (PyErr_Occurred()) {
+-                    throw error_already_set();
+-                }
+-                pybind11_fail("Unable to get capsule context");
++            if (PyErr_Occurred()) {
++                throw error_already_set();
+             }
+             const char *name = get_name_in_error_scope(o);
+             void *ptr = PyCapsule_GetPointer(o, name);
+             if (ptr == nullptr) {
+                 throw error_already_set();
+             }
+-            destructor(ptr);
++
++            if (destructor != nullptr) {
++                destructor(ptr);
++            }
+         });
+ 
+         if (!m_ptr || PyCapsule_SetContext(m_ptr, (void *) destructor) != 0) {
+diff --git a/tests/test_pytypes.cpp b/tests/test_pytypes.cpp
+index da0dc8f6..c95ff823 100644
+--- a/tests/test_pytypes.cpp
++++ b/tests/test_pytypes.cpp
+@@ -289,6 +289,12 @@ TEST_SUBMODULE(pytypes, m) {
+         return capsule;
+     });
+ 
++    m.def("return_capsule_with_explicit_nullptr_dtor", []() {
++        py::print("creating capsule with explicit nullptr dtor");
++        return py::capsule(reinterpret_cast<void *>(1234),
++                           static_cast<void (*)(void *)>(nullptr)); // PR #4221
++    });
++
+     // test_accessors
+     m.def("accessor_api", [](const py::object &o) {
+         auto d = py::dict();
+diff --git a/tests/test_pytypes.py b/tests/test_pytypes.py
+index a34eaa59..070849fc 100644
+--- a/tests/test_pytypes.py
++++ b/tests/test_pytypes.py
+@@ -299,6 +299,17 @@ def test_capsule(capture):
+     """
+     )
+ 
++    with capture:
++        a = m.return_capsule_with_explicit_nullptr_dtor()
++        del a
++        pytest.gc_collect()
++    assert (
++        capture.unordered
++        == """
++        creating capsule with explicit nullptr dtor
++    """
++    )
++
+ 
+ def test_accessors():
+     class SubTestObject:
