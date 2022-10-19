@@ -19,7 +19,8 @@ def build_list_of_tests(tests_dirpath, substrings):
                  "test_exc_namespace_visibility")):
       all_test_py.append(node)
       continue
-    if not node.startswith("test_") or not node.endswith(".cpp"):
+    if (not node.startswith("test_") or not node.endswith(".cpp") or
+        node == "test_eigen_tensor_avoid_stl_array.cpp"):
       continue
     cpp_filepath = os.path.join(tests_dirpath, node)
     py_filepath = cpp_filepath[:-3] + "py"
