@@ -16,8 +16,6 @@ def build_list_of_tests(tests_dirpath, substrings):
   for node in os.listdir(tests_dirpath):
     if ((node.startswith("test_class_sh_") and node.endswith(".py")) or
         node in ("test_namespace_visibility.py",
-                 "test_cross_module_exception_odr_1.py",
-                 "test_cross_module_exception_odr_2.py",
                 )):
       all_test_py.append(node)
       continue

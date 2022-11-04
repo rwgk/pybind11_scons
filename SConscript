@@ -123,8 +123,6 @@ for main_module in [
     "class_sh_module_local_1",
     "class_sh_module_local_2",
     "namespace_visibility_2",
-    "cross_module_exception_odr_1",
-    "cross_module_exception_odr_2",
 ]:
   if Glob("#pybind11/tests/%s.cpp" % main_module):
     pybind11_tests_shared_library(
