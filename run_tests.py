@@ -16,7 +16,9 @@ def build_list_of_tests(tests_dirpath, substrings):
   for node in os.listdir(tests_dirpath):
     if ((node.startswith("test_class_sh_") and node.endswith(".py")) or
         node in ("test_namespace_visibility.py",
-                 "test_exc_namespace_visibility")):
+                 "test_cross_module_exception_odr_1.py",
+                 "test_cross_module_exception_odr_2.py",
+                )):
       all_test_py.append(node)
       continue
     if (not node.startswith("test_") or not node.endswith(".cpp") or
@@ -96,7 +98,7 @@ def run(args):
   k_opt = []
   s_opt = []
   v_opt = []
-  count_opt = []
+  A_opt = []
   i_opt = False
   substrings = set()
   args_iter = iter(args)
@@ -119,12 +121,8 @@ def run(args):
     elif arg.startswith("-v"):
       assert not v_opt
       v_opt = [arg]
-    elif arg.startswith("--count"):
-      assert not count_opt
-      i = arg.find("=")
-      assert i >= 0
-      assert arg[i + 1:].isdigit()
-      count_opt = [arg]
+    elif arg.startswith("-A"):
+      A_opt.append(arg[2:])
     elif is_pybind11_source_dirpath(arg):
       assert pybind11_dirpath is None
       pybind11_dirpath = normabspath(arg)
@@ -170,7 +168,7 @@ def run(args):
       f_opt = pytest_no_faulthandler
     common_args = (
         ["-m", "pytest"]
-        + n_opt + f_opt + k_opt + s_opt + v_opt + count_opt
+        + n_opt + f_opt + k_opt + s_opt + v_opt + A_opt
         + list_of_test_py)
     print('Running tests in directory "%s":' % tests_dirpath)
     sys.stdout.flush()

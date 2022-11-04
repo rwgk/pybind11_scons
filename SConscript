@@ -99,10 +99,9 @@ def use_isystem(include_dirs):
     opts.extend(["-isystem", d])
   return opts
 
-def pybind11_tests_shared_library(target, sources):
+def pybind11_tests_shared_library(target, sources, special_defines=[]):
   env_base.Clone(
-      CPPDEFINES = extra_defines + [
-          "PYBIND11_TEST_BOOST"],
+      CPPDEFINES=extra_defines + ["PYBIND11_TEST_BOOST"] + special_defines,
       CPPPATH=["#pybind11/include"],
       CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt +
                use_isystem([python_include, "/usr/include/eigen3"]),
@@ -124,6 +123,8 @@ for main_module in [
     "class_sh_module_local_1",
     "class_sh_module_local_2",
     "namespace_visibility_2",
+    "cross_module_exception_odr_1",
+    "cross_module_exception_odr_2",
 ]:
   if Glob("#pybind11/tests/%s.cpp" % main_module):
     pybind11_tests_shared_library(
@@ -136,7 +137,7 @@ if Glob("#pybind11/tests/namespace_visibility_1.cpp"):
       sources=["namespace_visibility_1.cpp", "namespace_visibility_1s.cpp"])
 
 env_base.Clone(
-    CPPDEFINES = extra_defines,
+    CPPDEFINES=extra_defines,
     CPPPATH=["#pybind11/include",
              python_include],
     CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
@@ -146,7 +147,7 @@ env_base.Clone(
         source=["#pybind11/tests/test_embed/external_module.cpp"])
 
 env_base.Clone(
-    CPPDEFINES = extra_defines,
+    CPPDEFINES=extra_defines,
     CPPPATH=["#pybind11/include",
              python_include,
              "#Catch2/single_include/catch2"],
@@ -161,7 +162,7 @@ env_base.Clone(
 
 if Glob("#pybind11/ubench/holder_comparison.cpp"):
   env_base.Clone(
-      CPPDEFINES = extra_defines,
+      CPPDEFINES=extra_defines,
       CPPPATH=["#pybind11/include",
                python_include],
       CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt,
