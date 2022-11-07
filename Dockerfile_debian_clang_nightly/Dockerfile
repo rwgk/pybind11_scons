@@ -5,6 +5,7 @@
 # docker run --rm -v $HOME:/mounted_home -it debian_clang_nightly
 # cat how_to.txt
 
+# https://apt.llvm.org/
 FROM debian
 RUN apt update && apt install -y apt-utils
 RUN apt install -y lsb-release wget software-properties-common gnupg
