@@ -34,7 +34,8 @@ elif build_config_compiler == "linux_gcc":
 std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
 opt_opt = ["-O0", "-g"]
-wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated", "-Wnon-virtual-dtor", "-Wunused-result", "-Werror"]
+wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated",
+           "-Wundef", "-Wnon-virtual-dtor", "-Wunused-result", "-Werror"]
 
 extra_defines = arguments_get_split("extra_defines")
 extra_defines.append("PYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX")
@@ -118,6 +119,7 @@ pybind11_tests_shared_library(
 for main_module in [
     "cross_module_gil_utils",
     "cross_module_interleaved_error_already_set",
+    "eigen_tensor_avoid_stl_array",
     "pybind11_cross_module_tests",
     "class_sh_module_local_0",
     "class_sh_module_local_1",
