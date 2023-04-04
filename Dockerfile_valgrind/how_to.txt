@@ -1,0 +1,8 @@
+Example build & test
+--------------------
+. /venv-3.9/bin/activate
+cmake -S /mounted_pybind11/ -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DDOWNLOAD_EIGEN=ON -DDOWNLOAD_CATCH=ON -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=Debug "-DPYBIND11_TEST_OVERRIDE=test_type_caster_pyobject_ptr.cpp"
+cmake --build build --verbose -j 24 -- --keep-going
+cmake --build build --target pytest
+cmake --build build --target cpptest
+cmake --build build --target memcheck
