@@ -168,21 +168,26 @@ def run(args):
         ["-m", "pytest"]
         + n_opt + f_opt + k_opt + s_opt + v_opt + A_opt
         + list_of_test_py)
-    print('Running tests in directory "%s":' % tests_dirpath)
-    sys.stdout.flush()
     if not g_opt:
-      subprocess.call(
+      env_cmdl = " ".join([f"{k}={v}" for k, v in env.items()])
+      cmd_cmdl = " ".join([sys.executable] + common_args)
+      print(f"( cd {tests_dirpath} && {env_cmdl} {cmd_cmdl} )\n", flush=True)
+      completed_process = subprocess.run(
           [sys.executable] + common_args,
           cwd=tests_dirpath,
           env=env)
+      if completed_process.returncode:
+        print(f"\nERROR: completed_process.returncode="
+              f"{completed_process.returncode}\n", flush=True)
+        sys.exit(1)
     else:
       bash_env = " ".join(["%s='%s'" % kv for kv in sorted(env.items())])
       gdb_ex = " ".join(["run"] + common_args)
       bash_gdb_command = "%s gdb --cd '%s' '%s' -ex '%s'" % (
           bash_env, tests_dirpath, sys.executable, gdb_ex)
+      print('Running tests in directory "%s":' % tests_dirpath)
       print(bash_gdb_command)
-      print()
-      sys.stdout.flush()
+      print(flush=True)
       subprocess.call(bash_gdb_command, shell=True)
 
 
