@@ -1,0 +1,5 @@
+Example build & test
+--------------------
+cmake -S /mounted_pybind11/ -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=MinSizeRel -DPYBIND11_WERROR=ON -DDOWNLOAD_CATCH=ON -DDOWNLOAD_EIGEN=ON -DCMAKE_CXX_STANDARD=11 -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")
+cmake --build build -j 48 -- --keep-going
+cmake --build build --target pytest
