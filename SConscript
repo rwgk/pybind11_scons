@@ -102,7 +102,10 @@ def use_isystem(include_dirs):
 
 def pybind11_tests_shared_library(target, sources, special_defines=[]):
   env_base.Clone(
-      CPPDEFINES=extra_defines + ["PYBIND11_TEST_BOOST"] + special_defines,
+      CPPDEFINES=extra_defines +
+                 ["PYBIND11_TEST_BOOST",
+                  "PYBIND11_INTERNALS_VERSION=10000000"] +
+                 special_defines,
       CPPPATH=["#pybind11/include"],
       CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt +
                use_isystem([python_include, "/usr/include/eigen3"]),
