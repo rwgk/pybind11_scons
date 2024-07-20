@@ -38,6 +38,9 @@ wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated",
            "-Wundef", "-Wnon-virtual-dtor", "-Wunused-result", "-Werror"]
 
 extra_defines = arguments_get_split("extra_defines")
+extra_defines.append("PYBIND11_INTERNALS_VERSION=" +
+                     pybind11_build_config.get(
+                         "PYBIND11_INTERNALS_VERSION", "10000000"))
 extra_defines.append("PYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX")
 extra_defines.append("PYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE")
 
@@ -102,10 +105,7 @@ def use_isystem(include_dirs):
 
 def pybind11_tests_shared_library(target, sources, special_defines=[]):
   env_base.Clone(
-      CPPDEFINES=extra_defines +
-                 ["PYBIND11_TEST_BOOST",
-                  "PYBIND11_INTERNALS_VERSION=10000000"] +
-                 special_defines,
+      CPPDEFINES=extra_defines + ["PYBIND11_TEST_BOOST"] + special_defines,
       CPPPATH=["#pybind11/include"],
       CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt +
                use_isystem([python_include, "/usr/include/eigen3"]),
