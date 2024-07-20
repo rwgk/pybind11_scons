@@ -41,6 +41,7 @@ extra_defines = arguments_get_split("extra_defines")
 extra_defines.append("PYBIND11_INTERNALS_VERSION=" +
                      pybind11_build_config.get(
                          "PYBIND11_INTERNALS_VERSION", "10000000"))
+extra_defines.append("PYBIND11_SMART_HOLDER_PADDING_ON")
 extra_defines.append("PYBIND11_STRICT_ASSERTS_CLASS_HOLDER_VS_TYPE_CASTER_MIX")
 extra_defines.append("PYBIND11_ENABLE_TYPE_CASTER_ODR_GUARD_IF_AVAILABLE")
 
