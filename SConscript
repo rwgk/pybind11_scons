@@ -124,6 +124,7 @@ for main_module in [
     "cross_module_gil_utils",
     "cross_module_interleaved_error_already_set",
     "eigen_tensor_avoid_stl_array",
+    "exo_planet",
     "pybind11_cross_module_tests",
     "class_sh_module_local_0",
     "class_sh_module_local_1",
