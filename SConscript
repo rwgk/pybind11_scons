@@ -125,6 +125,7 @@ for main_module in [
     "cross_module_interleaved_error_already_set",
     "eigen_tensor_avoid_stl_array",
     "exo_planet_c_api",
+    "home_planet_very_lonely_traveler",
     "exo_planet_pybind11",
     "pybind11_cross_module_tests",
     "class_sh_module_local_0",
