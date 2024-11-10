@@ -104,11 +104,14 @@ def use_isystem(include_dirs):
     opts.extend(["-isystem", d])
   return opts
 
-def pybind11_tests_shared_library(target, sources, special_defines=[]):
+def pybind11_tests_shared_library(target, sources,
+                                  special_defines=[],
+                                  special_cxxflags=[]):
   env_base.Clone(
       CPPDEFINES=extra_defines + ["PYBIND11_TEST_BOOST"] + special_defines,
       CPPPATH=["#pybind11/include"],
-      CXXFLAGS=std_opt + ["-fPIC"] + vis_opt + opt_opt + wrn_opt +
+      CXXFLAGS=std_opt + special_cxxflags + ["-fPIC"] +
+               vis_opt + opt_opt + wrn_opt +
                use_isystem([python_include, "/usr/include/eigen3"]),
       LINKFLAGS=["-shared", "-fPIC"] + opt_opt,
       LIBPREFIX="").SharedLibrary(
@@ -124,7 +127,6 @@ for main_module in [
     "cross_module_gil_utils",
     "cross_module_interleaved_error_already_set",
     "eigen_tensor_avoid_stl_array",
-    "exo_planet_c_api",
     "home_planet_very_lonely_traveler",
     "exo_planet_pybind11",
     "pybind11_cross_module_tests",
@@ -137,6 +139,11 @@ for main_module in [
     pybind11_tests_shared_library(
         target="#lib/%s" % main_module,
         sources=["%s.cpp" % main_module])
+
+if Glob("#pybind11/tests/exo_planet_c_api.cpp"):
+  pybind11_tests_shared_library(
+      target="#lib/exo_planet_c_api",
+      sources=["exo_planet_c_api.cpp"], special_cxxflags=["-fno-exceptions"])
 
 if Glob("#pybind11/tests/namespace_visibility_1.cpp"):
   pybind11_tests_shared_library(
