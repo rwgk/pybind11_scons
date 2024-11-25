@@ -141,9 +141,14 @@ for main_module in [
         sources=["%s.cpp" % main_module])
 
 if Glob("#pybind11/tests/exo_planet_c_api.cpp"):
+  if Glob("#pybind11/include/pybind11/conduit/wrap_include_python_h.h"):
+    special_cxxflags = ["-fno-exceptions"]
+  else:
+    special_cxxflags = []
   pybind11_tests_shared_library(
       target="#lib/exo_planet_c_api",
-      sources=["exo_planet_c_api.cpp"], special_cxxflags=["-fno-exceptions"])
+      sources=["exo_planet_c_api.cpp"],
+      special_cxxflags=special_cxxflags)
 
 if Glob("#pybind11/tests/namespace_visibility_1.cpp"):
   pybind11_tests_shared_library(
