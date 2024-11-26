@@ -1,0 +1,22 @@
+nvc++ -stdpar -cuda -acc -mp -target=multicore -dM -E /dev/null
+
+    - name: Configure
+      shell: bash
+      run: |
+        source /etc/profile.d/modules.sh
+        module load /opt/nvidia/hpc_sdk/modulefiles/nvhpc/23.5
+        cmake -S /mounted_pybind11 -B build -DDOWNLOAD_CATCH=ON -DCMAKE_CXX_STANDARD=17 -DPYTHON_EXECUTABLE=$(python3 -c "import sys; p
+rint(sys.executable)") -DCMAKE_CXX_FLAGS="-Wc,--pending_instantiations=0" -DPYBIND11_TEST_FILTER="test_smart_ptr.cpp"
+
+    - name: Build
+      run: cmake --build build -j 2 --verbose
+
+    - name: Python tests
+      run: cmake --build build --target pytest
+
+    - name: C++ tests
+      run: cmake --build build --target cpptest
+
+    - name: Interface test
+      run: cmake --build build --target test_cmake_build
+
