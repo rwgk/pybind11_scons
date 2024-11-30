@@ -1,0 +1,5 @@
+Example build & test
+--------------------
+cmake -S /mounted_pybind11/ -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DDOWNLOAD_EIGEN=ON -DDOWNLOAD_CATCH=ON -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_CXX_STANDARD=20 -DCMAKE_BUILD_TYPE=Debug -DPYBIND11_WERROR=ON
+cmake --build build -j 64 -- --keep-going
+cmake --build build --target pytest
