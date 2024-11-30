@@ -35,8 +35,9 @@ std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
 opt_opt = ["-O0", "-g"]
 wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated",
-           "-Wundef", "-Wnon-virtual-dtor", "-Wunused-result", "-Wpedantic",
-           "-Werror"]
+           "-Wundef", "-Wnon-virtual-dtor", "-Wunused-result", "-Werror"]
+if not std_opt[0].startswith("-std=c++1"):
+  wrn_opt.append("-Wpedantic")
 
 extra_defines = arguments_get_split("extra_defines")
 extra_defines.append("PYBIND11_INTERNALS_VERSION=" +
