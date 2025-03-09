@@ -35,7 +35,10 @@ std_opt = ["-std=%s" % pybind11_build_config["cxx_std"]]
 vis_opt = ["-fvisibility=hidden"]
 opt_opt = ["-O0", "-g"]
 wrn_opt = ["-Wall", "-Wextra", "-Wconversion", "-Wcast-qual", "-Wdeprecated",
-           "-Wundef", "-Wnon-virtual-dtor", "-Wunused-result", "-Werror"]
+           "-Wundef", "-Wnon-virtual-dtor", "-Wunused-result", "-Werror",
+           # PR 5545 follow-on TODO: add ci.yml job with this option:
+           "-funsigned-char",
+          ]
 if not std_opt[0].startswith("-std=c++1"):
   wrn_opt.append("-Wpedantic")
 
