@@ -38,5 +38,5 @@ Note: this creates NO artifacts in `../pybind11`, although pytest might. Use `gi
 NOTE: smart_holder_poc_test.cpp needs to be built manually, for example:
 
 ```
-clang++ -fsanitize=address -std=c++11 -O0 -g -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -I$HOME/forked/pybind11/include -I$HOME/clone/Catch2/single_include/catch2 -I/usr/include/python3.11 $HOME/forked/pybind11/tests/pure_cpp/smart_holder_poc_test.cpp && ./a.out
+clang++ -fsanitize=address -std=c++11 -O0 -g -Wall -Wextra -Wconversion -Wcast-qual -Wdeprecated -Wnon-virtual-dtor -I$HOME/forked/pybind11/include -I$HOME/clone/Catch2/single_include/catch2 -I/usr/include/python3.12 $HOME/forked/pybind11/tests/pure_cpp/smart_holder_poc_test.cpp && ./a.out
 ```
