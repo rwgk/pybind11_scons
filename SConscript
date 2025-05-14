@@ -140,6 +140,8 @@ for main_module in [
     "class_sh_module_local_2",
     "namespace_visibility_2",
     "cprofile_compatibility_ext",
+    "mod_per_interpreter_gil",
+    "mod_shared_interpreter_gil",
 ]:
   if Glob("#pybind11/tests/%s.cpp" % main_module):
     pybind11_tests_shared_library(

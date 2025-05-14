@@ -16,6 +16,7 @@ def build_list_of_tests(tests_dirpath, substrings):
   for node in os.listdir(tests_dirpath):
     if ((node.startswith("test_class_sh_") and node.endswith(".py")) or
         node in ("test_namespace_visibility.py",
+                 "test_multiple_interpreters.py",
                  "test_cprofile_compatibility.py",
                 )):
       all_test_py.append(node)
@@ -136,12 +137,11 @@ def run(args):
   test_embed, list_of_test_py = build_list_of_tests(tests_dirpath, substrings)
   env = {"PYTHONPATH": normabspath("lib")}
   if test_embed:
-    print('Running tests in directory "%s":' % test_embed_dirpath)
+    bin_test_embed = normabspath("bin/test_embed")
+    print('(cd "%s" && PYTHONPATH="%s" "%s")' % (
+        test_embed_dirpath, env["PYTHONPATH"], bin_test_embed))
     sys.stdout.flush()
-    subprocess.call(
-        [normabspath("bin/test_embed")],
-        cwd=test_embed_dirpath,
-        env=env)
+    subprocess.call([bin_test_embed], cwd=test_embed_dirpath, env=env)
   if i_opt:
     print('Running %d individual test(s) in directory "%s":'
           % (len(list_of_test_py), tests_dirpath))
