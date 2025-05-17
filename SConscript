@@ -12,13 +12,13 @@ blob = subprocess.check_output([
 ], universal_newlines=True)
 python_paths = eval(blob)
 python_include = python_paths["include"]
+python_libdir, python_lib = os.path.split(python_paths["stdlib"])
 if (not os.path.isdir(python_include) and
     python_include.startswith("/usr/local/include/")):
   # sysconfig can be unreliable.
   python_include = python_include.replace(
       "/usr/local/include/",
       "/usr/include/")
-python_lib = os.path.basename(python_include)
 
 def arguments_get_split(key, sep=","):
   s = ARGUMENTS.get(key)
@@ -179,7 +179,8 @@ env_base.Clone(
              python_include,
              "#Catch2/single_include/catch2"],
     CXXFLAGS=std_opt + opt_opt + wrn_opt,
-    LINKFLAGS=["-Llib", "-rdynamic"] + opt_opt,
+    LINKFLAGS=["-rdynamic", f"-Wl,-rpath,{python_libdir}"] + opt_opt,
+    LIBPATH=["lib", python_libdir],
     LIBS=[python_lib, "pthread", "dl", "util"]).Program(
         target="#bin/test_embed",
         source=build_paths_in_subdir(
