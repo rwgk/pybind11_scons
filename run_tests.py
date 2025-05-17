@@ -138,7 +138,7 @@ def run(args):
   env = {"PYTHONPATH": normabspath("lib")}
   if test_embed:
     bin_test_embed = normabspath("bin/test_embed")
-    print('(cd "%s" && PYTHONPATH="%s" "%s")' % (
+    print('(cd "%s" && PATH= LD_LIBRARY_PATH= PYTHONPATH="%s" "%s")' % (
         test_embed_dirpath, env["PYTHONPATH"], bin_test_embed))
     sys.stdout.flush()
     subprocess.call([bin_test_embed], cwd=test_embed_dirpath, env=env)
