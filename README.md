@@ -13,7 +13,7 @@ sudo apt install scons  # Or similar, depending on platform (if not installed al
 
 mkdir workspace
 git clone https://github.com/rwgk/pybind11_scons.git
-git clone https://github.com/catchorg/Catch2.git
+git clone --branch v2.x https://github.com/catchorg/Catch2.git
 git clone https://github.com/pybind/pybind11.git
 ```
 
