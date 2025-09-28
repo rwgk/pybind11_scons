@@ -171,7 +171,7 @@ env_base.Clone(
     LINKFLAGS=["-shared", "-fPIC"] + opt_opt,
     LIBPREFIX="").SharedLibrary(
         target="#lib/external_module",
-        source=["#pybind11/tests/test_embed/external_module.cpp"])
+        source=["#pybind11/tests/test_with_catch/external_module.cpp"])
 
 env_base.Clone(
     CPPDEFINES=extra_defines,
@@ -182,9 +182,9 @@ env_base.Clone(
     LINKFLAGS=["-rdynamic", f"-Wl,-rpath,{python_libdir}"] + opt_opt,
     LIBPATH=["lib", python_libdir],
     LIBS=[python_lib, "pthread", "dl", "util"]).Program(
-        target="#bin/test_embed",
+        target="#bin/test_with_catch",
         source=build_paths_in_subdir(
-            "#pybind11/tests/test_embed",
+            "#pybind11/tests/test_with_catch",
             ["test_interpreter.cpp",
              "catch.cpp"]))
 

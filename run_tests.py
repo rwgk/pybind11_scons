@@ -59,7 +59,7 @@ def build_list_of_tests(tests_dirpath, substrings):
     if 1 in in_out_seen:
       return False
     return -1 in in_out_seen
-  test_embed = substring_match("test_embed")
+  test_with_catch = substring_match("test_with_catch")
   list_of_test_py = []
   for test_py in all_test_py:
     if substring_match(test_py):
@@ -70,7 +70,7 @@ def build_list_of_tests(tests_dirpath, substrings):
         "Unused command-line argument%s: %s" % (
             plural_s(len(substring_unused)),
             " ".join(sorted(substring_unused))))
-  return test_embed, list_of_test_py
+  return test_with_catch, list_of_test_py
 
 
 def plural_s(num, suffix="s"):
@@ -133,15 +133,15 @@ def run(args):
       substrings.add(arg)
   assert pybind11_dirpath is not None
   tests_dirpath = os.path.join(pybind11_dirpath, "tests")
-  test_embed_dirpath = os.path.join(tests_dirpath, "test_embed")
-  test_embed, list_of_test_py = build_list_of_tests(tests_dirpath, substrings)
+  test_with_catch_dirpath = os.path.join(tests_dirpath, "test_with_catch")
+  test_with_catch, list_of_test_py = build_list_of_tests(tests_dirpath, substrings)
   env = {"PYTHONPATH": normabspath("lib")}
-  if test_embed:
-    bin_test_embed = normabspath("bin/test_embed")
+  if test_with_catch:
+    bin_test_with_catch = normabspath("bin/test_with_catch")
     print('(cd "%s" && PATH= LD_LIBRARY_PATH= PYTHONPATH="%s" "%s")' % (
-        test_embed_dirpath, env["PYTHONPATH"], bin_test_embed))
+        test_with_catch_dirpath, env["PYTHONPATH"], bin_test_with_catch))
     sys.stdout.flush()
-    subprocess.call([bin_test_embed], cwd=test_embed_dirpath, env=env)
+    subprocess.call([bin_test_with_catch], cwd=test_with_catch_dirpath, env=env)
   if i_opt:
     print('Running %d individual test(s) in directory "%s":'
           % (len(list_of_test_py), tests_dirpath))
