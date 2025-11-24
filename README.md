@@ -9,9 +9,8 @@ Example usage:
 Starting from scratch:
 
 ```
-sudo apt install scons  # Or similar, depending on platform (if not installed already).
-
 mkdir workspace
+cd workspace
 git clone https://github.com/rwgk/pybind11_scons.git
 git clone --branch v2.x https://github.com/catchorg/Catch2.git
 git clone https://github.com/pybind/pybind11.git
@@ -22,7 +21,7 @@ Starting a new build directory:
 ```
 mkdir build_clang
 cd build_clang
-echo "/usr" > PYROOT
+python -m venv TestVenv && TestVenv/bin/pip install --upgrade pip && TestVenv/bin/pip install -r ../pybind11/tests/requirements.txt && TestVenv/bin/pip install pytest-xdist
 cp ../pybind11_scons/SConstruct .
 # Maybe edit SConstruct to change compiler (default is linux_clang).
 ```
@@ -30,7 +29,7 @@ cp ../pybind11_scons/SConstruct .
 Iterating for development:
 
 ```
-scons -j 8 && "$(cat PYROOT)"/bin/python3 ../pybind11_scons/run_tests.py ../pybind11
+scons -j $(nproc) && TestVenv/bin/python3 ../pybind11_scons/run_tests.py ../pybind11 16
 ```
 
 Note: this creates NO artifacts in `../pybind11`, although pytest might. Use `git clean -fdx` to clean up.
