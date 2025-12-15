@@ -186,6 +186,7 @@ env_base.Clone(
         source=build_paths_in_subdir(
             "#pybind11/tests/test_with_catch",
             ["test_interpreter.cpp",
+             "test_subinterpreter.cpp",
              "catch.cpp"]))
 
 if Glob("#pybind11/ubench/holder_comparison.cpp"):
