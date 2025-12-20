@@ -137,11 +137,11 @@ def run(args):
   test_with_catch, list_of_test_py = build_list_of_tests(tests_dirpath, substrings)
   env = {"PYTHONPATH": normabspath("lib")}
   if test_with_catch:
-    bin_test_with_catch = normabspath("bin/test_with_catch")
-    print('(cd "%s" && PATH= LD_LIBRARY_PATH= PYTHONPATH="%s" "%s")' % (
-        test_with_catch_dirpath, env["PYTHONPATH"], bin_test_with_catch))
+    bin_test_with_catch = ["/usr/bin/timeout", "3s", normabspath("bin/test_with_catch")]
+    print('(cd "%s" && PATH= LD_LIBRARY_PATH= PYTHONPATH="%s" %s %s "%s")' % (
+        test_with_catch_dirpath, env["PYTHONPATH"], *bin_test_with_catch))
     sys.stdout.flush()
-    subprocess.call([bin_test_with_catch], cwd=test_with_catch_dirpath, env=env)
+    subprocess.call(bin_test_with_catch, cwd=test_with_catch_dirpath, env=env)
   if i_opt:
     print('Running %d individual test(s) in directory "%s":'
           % (len(list_of_test_py), tests_dirpath))
