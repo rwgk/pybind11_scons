@@ -89,7 +89,8 @@ echo "Activating virtual environment and installing dependencies..."
 pip install --upgrade pip
 pip install -r "$pybind11_tests_requirements"
 pip install pytest-xdist
-pip install numpy
+pip install --only-binary :all: numpy || true
+pip install --only-binary :all: scipy || true
 
 echo "Done."
 echo
