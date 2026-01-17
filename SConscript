@@ -142,6 +142,7 @@ for main_module in [
     "cprofile_compatibility_ext",
     "mod_per_interpreter_gil",
     "mod_shared_interpreter_gil",
+    "mod_per_interpreter_gil_with_singleton",
 ]:
   if Glob("#pybind11/tests/%s.cpp" % main_module):
     pybind11_tests_shared_library(
