@@ -18,6 +18,7 @@ def build_list_of_tests(tests_dirpath, substrings):
         node in ("test_namespace_visibility.py",
                  "test_multiple_interpreters.py",
                  "test_cprofile_compatibility.py",
+                 "test_standalone_enum_module.py",
                 )):
       all_test_py.append(node)
       continue

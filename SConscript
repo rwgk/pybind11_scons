@@ -143,6 +143,7 @@ for main_module in [
     "mod_per_interpreter_gil",
     "mod_shared_interpreter_gil",
     "mod_per_interpreter_gil_with_singleton",
+    "standalone_enum_module",
 ]:
   if Glob("#pybind11/tests/%s.cpp" % main_module):
     pybind11_tests_shared_library(
