@@ -28,7 +28,9 @@ def build_list_of_tests(tests_dirpath, substrings):
     cpp_filepath = os.path.join(tests_dirpath, node)
     py_filepath = cpp_filepath[:-3] + "py"
     assert os.path.isfile(cpp_filepath), cpp_filepath
-    assert os.path.isfile(py_filepath), py_filepath
+    # Helper translation units, such as test_chrono_second_tu.cpp, have no Python test.
+    if not os.path.isfile(py_filepath):
+      continue
     all_test_py.append(node[:-3] + "py")
   all_test_py = list(sorted(set(all_test_py)))
   if (sys.version_info.major >= 3 and
@@ -142,7 +144,7 @@ def run(args):
     print('(cd "%s" && PATH= LD_LIBRARY_PATH= PYTHONPATH="%s" %s %s "%s")' % (
         test_with_catch_dirpath, env["PYTHONPATH"], *bin_test_with_catch))
     sys.stdout.flush()
-    subprocess.call(bin_test_with_catch, cwd=test_with_catch_dirpath, env=env)
+    subprocess.check_call(bin_test_with_catch, cwd=test_with_catch_dirpath, env=env)
   if i_opt:
     print('Running %d individual test(s) in directory "%s":'
           % (len(list_of_test_py), tests_dirpath))
